@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Base360 — the walkthrough, built for the whole team to see</title>
+<meta name="description" content="A landing page built for a considered buyer: an ROI calculator personalized to your volume, a comparison against duct-taped tools, and a way to loop in your team before you decide." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+/* ==========================================================
+   Base360 — Alt 7: "The Walkthrough" — considered-purchase UX.
+   Design thesis: the visitor is rarely the sole decision maker.
+   Good UX here means calibrated actions for different readiness
+   levels (book a walkthrough / start free / share with a
+   teammate), a way to personalize the value prop to their own
+   numbers (ROI calculator), and pre-empting the objections a
+   buying committee will actually raise (integration, security,
+   contract terms) instead of hoping they don't ask.
+   Palette: slate-teal (authority) + muted gold (evaluation aid),
+   warm stone paper. Type: Public Sans (official, trustworthy) +
+   Source Code Pro (figures, terms).
+   ========================================================== */
+:root {
+  --paper: #f1efe9; --pane: #ffffff; --ink: #1c2024; --muted: #5c6470;
+  --line: #ddd8cd; --slate: #1d4e5f; --slate-deep: #143a48; --slate-soft: #e2eef1;
+  --gold: #a8781f; --gold-soft: #f6ecd8;
+  --shadow: 0 20px 46px -26px rgba(28, 32, 36, 0.25);
+  --disp: "Public Sans", system-ui, sans-serif;
+  --mono: "Source Code Pro", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #14171a; --pane: #1b1f23; --ink: #edeeee; --muted: #9aa1a9;
+    --line: #2b3034; --slate: #59a7bf; --slate-deep: #3c8299; --slate-soft: #10262c;
+    --gold: #d3a44b; --gold-soft: #2b2313;
+    --shadow: 0 20px 46px -26px rgba(0, 0, 0, 0.6);
+  }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font-family: var(--disp); line-height: 1.62; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+.shell { width: min(1080px, 100% - 44px); margin-inline: auto; }
+a { color: inherit; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2.5px solid var(--slate); outline-offset: 2px; }
+h1, h2, h3 { font-weight: 800; letter-spacing: -0.012em; text-wrap: balance; line-height: 1.12; }
+.mono { font-family: var(--mono); }
+.tnum { font-variant-numeric: tabular-nums; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .55s ease, transform .55s cubic-bezier(.2,.7,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
+
+button { font: inherit; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; padding: 13px 22px; border-radius: 10px; text-decoration: none; cursor: pointer; border: 1.5px solid transparent; transition: transform .15s, box-shadow .15s, background .15s; }
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--slate); color: #fff; box-shadow: 0 10px 22px -10px rgba(29,78,95,0.5); }
+.btn-primary:hover { background: var(--slate-deep); transform: translateY(-2px); }
+.btn-ghost { background: var(--pane); border-color: var(--line); color: var(--ink); }
+.btn-ghost:hover { border-color: var(--slate); color: var(--slate-deep); }
+.btn-text { background: none; border: none; padding: 6px 2px; font-weight: 700; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; color: var(--slate-deep); cursor: pointer; }
+.btn-sm { padding: 9px 15px; font-size: 13.5px; border-radius: 8px; }
+
+/* ---------- Header ---------- */
+header { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--paper) 90%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.head-row { display: flex; align-items: center; gap: 26px; height: 64px; }
+.word { font-weight: 800; font-size: 19px; text-decoration: none; }
+.word b { color: var(--slate); }
+.head-links { display: flex; gap: 22px; margin-inline: auto; }
+.head-links a { text-decoration: none; font-size: 14px; font-weight: 600; color: var(--muted); }
+.head-links a:hover { color: var(--ink); }
+.head-cta { display: flex; gap: 10px; align-items: center; }
+
+/* ---------- Hero ---------- */
+.hero { padding: 60px 0 0; }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--slate-deep); background: var(--slate-soft); border-radius: 999px; padding: 6px 14px; margin-bottom: 22px; }
+h1.hero-h { font-size: clamp(32px, 4.6vw, 50px); max-width: 17ch; margin-bottom: 18px; }
+.hero-sub { max-width: 58ch; font-size: 17px; color: var(--muted); margin-bottom: 30px; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+.share-wrap { position: relative; display: inline-flex; }
+.share-tip { position: absolute; top: -34px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--paper); font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 6px; opacity: 0; pointer-events: none; transition: opacity .15s; white-space: nowrap; }
+.share-tip.show { opacity: 1; }
+.hero-fine { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+/* ---------- Role cards ---------- */
+.roles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 42px; }
+.role-card { background: var(--pane); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+.role-card b.k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--slate-deep); }
+.role-card h3 { font-size: 16px; margin: 6px 0 8px; }
+.role-card p { font-size: 13.5px; color: var(--muted); }
+
+/* ---------- Sections ---------- */
+section { padding: 84px 0; }
+.sec-eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--slate-deep); margin-bottom: 14px; }
+h2 { font-size: clamp(26px, 3.2vw, 36px); max-width: 24ch; margin-bottom: 14px; }
+.sec-sub { max-width: 60ch; color: var(--muted); font-size: 16px; }
+
+/* ---------- ROI calculator ---------- */
+.calc { margin-top: 40px; background: var(--pane); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; }
+.calc-inputs { padding: 30px; border-right: 1px solid var(--line); display: grid; gap: 22px; }
+.field label { display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 8px; }
+.field .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+.range-row { display: flex; align-items: center; gap: 14px; }
+.range-row input[type="range"] { flex: 1; accent-color: var(--slate); }
+.range-val { font-family: var(--mono); font-weight: 700; font-size: 15px; min-width: 46px; text-align: right; }
+select { width: 100%; border: 1.5px solid var(--line); border-radius: 10px; padding: 11px 12px; font: inherit; background: var(--paper); color: var(--ink); }
+.calc-output { padding: 30px; display: grid; gap: 18px; align-content: center; background: var(--slate-soft); }
+.out-stat b { display: block; font-family: var(--mono); font-size: clamp(26px, 3vw, 34px); font-weight: 700; color: var(--slate-deep); }
+.out-stat span { font-size: 12.5px; color: var(--muted); }
+.calc-output .out-note { font-size: 12.5px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 14px; }
+
+/* ---------- Condensed log ---------- */
+.log2 { margin-top: 40px; border-top: 1px solid var(--line); }
+.log2-row { display: grid; grid-template-columns: 60px 1fr auto; gap: 18px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.log2-n { font-family: var(--mono); font-weight: 700; font-size: 13px; color: var(--slate-deep); background: var(--slate-soft); width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; }
+.log2-row h3 { font-size: 15px; margin-bottom: 3px; }
+.log2-row p { font-size: 13px; color: var(--muted); }
+.log2-t { font-family: var(--mono); font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+
+/* ---------- Comparison table ---------- */
+.cmp-table { margin-top: 40px; width: 100%; border-collapse: collapse; background: var(--pane); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.cmp-scroll { overflow-x: auto; margin-top: 40px; border: 1px solid var(--line); border-radius: 14px; }
+.cmp-scroll table { width: 100%; border-collapse: collapse; min-width: 560px; }
+.cmp-scroll th, .cmp-scroll td { padding: 14px 18px; text-align: left; font-size: 14px; border-bottom: 1px solid var(--line); }
+.cmp-scroll thead th { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); background: var(--paper); }
+.cmp-scroll th.hl, .cmp-scroll td.hl { background: var(--slate-soft); }
+.cmp-scroll tbody tr:last-child td { border-bottom: none; }
+.cmp-scroll td.yes { color: var(--slate-deep); font-weight: 700; }
+.cmp-scroll td.no { color: var(--muted); }
+
+/* ---------- Trust band ---------- */
+.trust2 { margin-top: 44px; display: flex; flex-wrap: wrap; gap: 12px; }
+.trust2 span { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--pane); border-radius: 999px; padding: 8px 15px; font-size: 13px; }
+.trust2 span::before { content: "✓"; color: var(--slate); font-weight: 700; }
+
+/* ---------- FAQ ---------- */
+.faq { margin-top: 36px; border-top: 1px solid var(--line); }
+.faq-item { border-bottom: 1px solid var(--line); }
+.faq-q { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 20px 4px; background: none; border: none; cursor: pointer; text-align: left; font-weight: 700; font-size: 15.5px; color: var(--ink); }
+.faq-q .plus { font-family: var(--mono); font-size: 18px; color: var(--muted); transition: transform .2s; flex: none; }
+.faq-q[aria-expanded="true"] .plus { transform: rotate(45deg); color: var(--slate); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height .28s ease; }
+.faq-a p { padding: 0 4px 20px; color: var(--muted); font-size: 14.5px; max-width: 62ch; }
+
+/* ---------- Final CTA ---------- */
+.final { background: var(--slate-deep); color: #fff; border-radius: 20px; padding: clamp(40px, 6vw, 68px); }
+.final h2 { color: #fff; max-width: 20ch; }
+.final p.lede { color: color-mix(in srgb, #fff 85%, transparent); margin: 14px 0 26px; max-width: 52ch; }
+.final-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.final .btn-ghost { background: transparent; border-color: rgba(255,255,255,0.35); color: #fff; }
+.final .btn-ghost:hover { border-color: #fff; }
+.final-roi { margin-top: 22px; font-family: var(--mono); font-size: 13px; color: var(--gold); display: none; }
+.final-roi.show { display: block; }
+
+footer { border-top: 1px solid var(--line); padding: 26px 0 44px; }
+.foot-row { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: baseline; font-size: 13px; color: var(--muted); }
+.foot-row .right { margin-left: auto; }
+
+@media (max-width: 880px) {
+  .head-links { display: none; }
+  .roles { grid-template-columns: 1fr; }
+  .calc { grid-template-columns: 1fr; }
+  .calc-inputs { border-right: none; border-bottom: 1px solid var(--line); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="shell head-row">
+    <a class="word" href="#top">base<b>360</b></a>
+    <nav class="head-links" aria-label="Primary">
+      <a href="#roi">ROI</a>
+      <a href="#compare">Compare</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="head-cta">
+      <a class="btn-text" href="#top">Start free trial</a>
+      <a class="btn btn-primary btn-sm" href="#top">Book a walkthrough</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero shell">
+    <p class="eyebrow reveal">For teams that need everyone on board first</p>
+    <h1 class="hero-h reveal">Bring the whole team a plan, not just a link.</h1>
+    <p class="hero-sub reveal">Base360 replaces the five tools your team uses to answer comments, DMs, WhatsApp, calls and email — with AI agents and a built-in CRM. Here's what to check before you decide.</p>
+    <div class="hero-actions reveal">
+      <a class="btn btn-primary" href="#top">Book a 20-minute walkthrough</a>
+      <a class="btn btn-ghost" href="#top">Start free trial</a>
+      <span class="share-wrap">
+        <button class="btn-text" id="shareBtn" type="button">Send this to a teammate →</button>
+        <span class="share-tip" id="shareTip" role="status">Link copied</span>
+      </span>
+    </div>
+    <p class="hero-fine reveal">No commitment on the walkthrough call · Free trial needs no credit card</p>
+
+    <div class="roles reveal">
+      <div class="role-card"><b class="k">Marketing lead</b><h3>Stop losing comments to volume</h3><p>Every Instagram and TikTok comment gets an on-brand reply, and top-of-funnel interest gets captured instead of scrolling away.</p></div>
+      <div class="role-card"><b class="k">Support &amp; CX lead</b><h3>Cut routine tickets before they start</h3><p>Shipping, sizing, and stock questions get answered instantly, so your team only sees what actually needs a human.</p></div>
+      <div class="role-card"><b class="k">Founder / Ops</b><h3>See the whole customer in one place</h3><p>One record per customer, from first comment to closed sale — instead of piecing it together across five tools.</p></div>
+    </div>
+  </div>
+
+  <!-- ============ ROI calculator ============ -->
+  <section id="roi">
+    <div class="shell">
+      <p class="sec-eyebrow reveal">Put your own numbers in</p>
+      <h2 class="reveal">What would this actually save your team?</h2>
+      <p class="sec-sub reveal">A rough, honest estimate — adjust it to match your volume and see the monthly difference.</p>
+
+      <div class="calc reveal">
+        <div class="calc-inputs">
+          <div class="field">
+            <label for="volInput">Comments + DMs you get per week</label>
+            <div class="range-row">
+              <input type="range" id="volInput" min="20" max="2000" step="10" value="300" />
+              <span class="range-val tnum" id="volVal">300</span>
+            </div>
+            <p class="hint">Rough is fine — this is just to size the estimate.</p>
+          </div>
+          <div class="field">
+            <label for="teamSelect">People currently answering them</label>
+            <select id="teamSelect">
+              <option value="1">Just me</option>
+              <option value="2" selected>2–3 people</option>
+              <option value="5">4–10 people</option>
+              <option value="12">10+ people</option>
+            </select>
+          </div>
+        </div>
+        <div class="calc-output" aria-live="polite">
+          <div class="out-stat"><b class="tnum" id="hoursOut">37 hrs</b><span>reclaimed per month, team-wide</span></div>
+          <div class="out-stat"><b class="tnum" id="missedOut">~113</b><span>comments/month that typically go unanswered today</span></div>
+          <p class="out-note">Based on an average 90 seconds per reply and a 15% typical miss rate at your volume. Your real numbers may vary — that's what the walkthrough is for.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Condensed how it works ============ -->
+  <section>
+    <div class="shell">
+      <p class="sec-eyebrow reveal">How one comment moves through the system</p>
+      <h2 class="reveal">From comment to closed, automatically.</h2>
+      <div class="log2 reveal">
+        <div class="log2-row"><span class="log2-n">01</span><div><h3>Comment arrives</h3><p>On any connected channel.</p></div><span class="log2-t">19:42:07</span></div>
+        <div class="log2-row"><span class="log2-n">02</span><div><h3>AI replies, opens a DM</h3><p>Public reply, then private while the intent is hot.</p></div><span class="log2-t">+4 sec</span></div>
+        <div class="log2-row"><span class="log2-n">03</span><div><h3>AI handles the conversation</h3><p>Answers in your brand's voice, as long as it takes.</p></div><span class="log2-t">19:42:16</span></div>
+        <div class="log2-row"><span class="log2-n">04</span><div><h3>Filed to CRM — high-intent</h3><p>Full context attached, routed to the right person.</p></div><span class="log2-t">19:44:58</span></div>
+        <div class="log2-row"><span class="log2-n">05</span><div><h3>AI voice follow-up call</h3><p>Walks the customer through the product.</p></div><span class="log2-t">19:47:00</span></div>
+        <div class="log2-row"><span class="log2-n">06</span><div><h3>Nurtured until closed</h3><p>Email flow runs until the sale is made.</p></div><span class="log2-t">Resolved</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Comparison ============ -->
+  <section id="compare">
+    <div class="shell">
+      <p class="sec-eyebrow reveal">The alternative is five tools, not zero</p>
+      <h2 class="reveal">What you're actually comparing this to.</h2>
+      <p class="sec-sub reveal">Most teams don't compare Base360 to "nothing" — they compare it to the stack they've already duct-taped together.</p>
+      <div class="cmp-scroll reveal">
+        <table>
+          <thead><tr><th scope="col">Need</th><th scope="col">Typical stack today</th><th scope="col" class="hl">With Base360</th></tr></thead>
+          <tbody>
+            <tr><td>Comment &amp; DM replies</td><td class="no">Manual, per platform</td><td class="hl yes">AI agent, every channel</td></tr>
+            <tr><td>WhatsApp / SMS / calls</td><td class="no">Separate tool, separate inbox</td><td class="hl yes">Same inbox, same record</td></tr>
+            <tr><td>Lead tracking</td><td class="no">Spreadsheet or a bolted-on CRM</td><td class="hl yes">Built in, auto-filed</td></tr>
+            <tr><td>Email &amp; subscribers</td><td class="no">Another platform, another login</td><td class="hl yes">Same customer record</td></tr>
+            <tr><td>Tools to manage</td><td class="no">4–6</td><td class="hl yes">1</td></tr>
+            <tr><td>Setup time</td><td class="no">Weeks, per tool</td><td class="hl yes">~10 minutes</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="trust2 reveal">
+        <span>Connects to your existing Meta &amp; TikTok business accounts</span>
+        <span>Data encrypted in transit and at rest</span>
+        <span>Built with enterprise-grade security practices</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section id="faq">
+    <div class="shell">
+      <p class="sec-eyebrow reveal">What the rest of the team will ask</p>
+      <h2 class="reveal">Objections, answered up front.</h2>
+      <div class="faq reveal">
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">How does this integrate with our existing CRM?<span class="plus">+</span></button>
+          <div class="faq-a"><p>Base360 works as a standalone CRM out of the box, and can sync leads and activity out to the tools you already run — so you're not forced to migrate everything on day one.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">What does onboarding actually look like?<span class="plus">+</span></button>
+          <div class="faq-a"><p>You connect your channels, set what the AI is allowed to say, and it starts replying — most teams are live on their first channel within about 10 minutes, with the full walkthrough covering the rest.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Can multiple people on our team use it at once?<span class="plus">+</span></button>
+          <div class="faq-a"><p>Yes — conversations and leads can be assigned, and everyone sees the same record instead of five separate inboxes.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">What happens to our data if we cancel?<span class="plus">+</span></button>
+          <div class="faq-a"><p>You can export your full conversation and lead history at any time — cancelling doesn't lock your data in.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Is there a contract, or is it month-to-month?<span class="plus">+</span></button>
+          <div class="faq-a"><p>Month-to-month by default. The free trial has no card required, and there's no long-term commitment to start.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Final CTA ============ -->
+  <section>
+    <div class="shell">
+      <div class="final reveal">
+        <h2>Ready to bring this to your team?</h2>
+        <p class="lede">Book a walkthrough for the group, start a free trial to poke around yourself, or send this page to whoever needs to sign off.</p>
+        <div class="final-actions">
+          <a class="btn btn-primary" style="background:var(--gold)" href="#top">Book a 20-minute walkthrough</a>
+          <a class="btn btn-ghost" href="#top">Start free trial</a>
+          <button class="btn btn-ghost" id="shareBtn2" type="button">Copy link to share</button>
+        </div>
+        <p class="final-roi mono" id="finalRoi"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="shell foot-row">
+    <a class="word" href="#top" style="font-size:15px;">base<b>360</b>.ai</a>
+    <span>One system for every conversation.</span>
+    <span class="right">© 2026 Base360</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---- scroll reveal ---- */
+  var els = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window && !reduced) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: "0px 0px -24px 0px" });
+    els.forEach(function (el) { io.observe(el); });
+  } else {
+    els.forEach(function (el) { el.classList.add("in"); });
+  }
+
+  /* ---- ROI calculator ---- */
+  var volInput = document.getElementById("volInput");
+  var volVal = document.getElementById("volVal");
+  var teamSelect = document.getElementById("teamSelect");
+  var hoursOut = document.getElementById("hoursOut");
+  var missedOut = document.getElementById("missedOut");
+  var finalRoi = document.getElementById("finalRoi");
+
+  function recalc() {
+    var perWeek = parseInt(volInput.value, 10);
+    volVal.textContent = perWeek;
+    var hoursPerMonth = Math.round((perWeek * 90 / 3600) * 4.33);
+    var missedPerMonth = Math.round(perWeek * 4.33 * 0.15);
+    hoursOut.textContent = hoursPerMonth + " hrs";
+    missedOut.textContent = "~" + missedPerMonth;
+    finalRoi.textContent = "Based on what you entered: about " + hoursPerMonth + " hours back for your team each month, and " + missedPerMonth + " fewer missed comments.";
+    finalRoi.classList.add("show");
+  }
+  volInput.addEventListener("input", recalc);
+  teamSelect.addEventListener("change", recalc);
+  recalc();
+
+  /* ---- FAQ accordion ---- */
+  document.querySelectorAll(".faq-q").forEach(function (btn) {
+    var panel = btn.nextElementSibling;
+    btn.addEventListener("click", function () {
+      var open = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", String(!open));
+      panel.style.maxHeight = open ? "0px" : panel.scrollHeight + "px";
+    });
+  });
+
+  /* ---- share / copy link ---- */
+  function doShare(tipEl) {
+    var url = window.location.href;
+    var text = "Take a look at Base360 — " + url;
+    function ok() {
+      if (tipEl) {
+        tipEl.classList.add("show");
+        setTimeout(function () { tipEl.classList.remove("show"); }, 1800);
+      }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok, ok);
+    } else {
+      ok();
+    }
+  }
+  var shareBtn = document.getElementById("shareBtn");
+  var shareTip = document.getElementById("shareTip");
+  shareBtn.addEventListener("click", function () { doShare(shareTip); });
+  var shareBtn2 = document.getElementById("shareBtn2");
+  shareBtn2.addEventListener("click", function () {
+    var original = shareBtn2.textContent;
+    doShare(null);
+    shareBtn2.textContent = "Copied!";
+    setTimeout(function () { shareBtn2.textContent = original; }, 1800);
+  });
+})();
+</script>
+</body>
+</html>

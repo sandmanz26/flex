@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Base360 — try it on a real comment, right now</title>
+<meta name="description" content="Type a comment, watch Base360's AI answer it in real time, and see it get filed as a lead — before you sign up for anything." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+/* ==========================================================
+   Base360 — Alt 6: "Try It Now" — self-serve, low-friction UX.
+   Design thesis: the fastest way to convince a skeptical visitor
+   is to let them DO the thing, not read about it. Centerpiece is
+   a real interactive demo (type a comment, get an AI reply).
+   Every other decision — tabs, FAQ, sticky CTA, email capture —
+   is built to remove friction for someone ready to act now.
+   Palette: signal blue (action) + green (success, semantic only).
+   Type: Manrope (display/body) + Space Mono (data/UI labels).
+   ========================================================== */
+:root {
+  --paper: #f6f8fc; --pane: #ffffff; --ink: #0b1220; --muted: #5b667e;
+  --line: #dde3ef; --blue: #0055ff; --blue-deep: #0041c4; --blue-soft: #e8effe;
+  --green: #16a34a; --green-soft: #e7f7ec;
+  --shadow: 0 20px 46px -26px rgba(11, 18, 32, 0.28);
+  --disp: "Manrope", system-ui, sans-serif;
+  --mono: "Space Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0a0e18; --pane: #121826; --ink: #eef1f9; --muted: #8d97b0;
+    --line: #232c40; --blue: #5c8bff; --blue-deep: #3f6de0; --blue-soft: #16223f;
+    --green: #3ecb76; --green-soft: #102a1a;
+    --shadow: 0 20px 46px -26px rgba(0, 0, 0, 0.65);
+  }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font-family: var(--disp); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+.shell { width: min(1040px, 100% - 44px); margin-inline: auto; }
+a { color: inherit; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2.5px solid var(--blue); outline-offset: 2px; }
+h1, h2, h3 { font-weight: 800; letter-spacing: -0.015em; text-wrap: balance; line-height: 1.1; }
+.mono { font-family: var(--mono); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .55s ease, transform .55s cubic-bezier(.2,.7,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
+
+button { font: inherit; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; padding: 13px 22px; border-radius: 10px; text-decoration: none; cursor: pointer; border: 1.5px solid transparent; transition: transform .15s, box-shadow .15s, background .15s; }
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--blue); color: #fff; box-shadow: 0 10px 22px -10px rgba(0,85,255,0.55); }
+.btn-primary:hover { background: var(--blue-deep); transform: translateY(-2px); }
+.btn-ghost { background: var(--pane); border-color: var(--line); color: var(--ink); }
+.btn-ghost:hover { border-color: var(--blue); color: var(--blue-deep); }
+.btn-sm { padding: 9px 15px; font-size: 13.5px; border-radius: 8px; }
+
+/* ---------- Header ---------- */
+header { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.head-row { display: flex; align-items: center; gap: 26px; height: 64px; }
+.word { font-weight: 800; font-size: 19px; text-decoration: none; }
+.word b { color: var(--blue); }
+.head-links { display: flex; gap: 22px; margin-inline: auto; }
+.head-links a { text-decoration: none; font-size: 14px; font-weight: 600; color: var(--muted); }
+.head-links a:hover { color: var(--ink); }
+
+/* ---------- Hero ---------- */
+.hero { padding: 58px 0 0; text-align: center; }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue-deep); background: var(--blue-soft); border-radius: 999px; padding: 6px 14px; margin-bottom: 22px; }
+h1.hero-h { font-size: clamp(32px, 5vw, 52px); max-width: 18ch; margin-inline: auto 22px; margin-bottom: 18px; }
+.hero-sub { max-width: 54ch; margin-inline: auto; font-size: 17px; color: var(--muted); margin-bottom: 28px; }
+.hero-cta { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+.hero-fine { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 14px; }
+
+/* ---------- Live demo ---------- */
+.demo-wrap { margin-top: 44px; }
+.demo { background: var(--pane); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); overflow: hidden; text-align: left; }
+.demo-head { display: flex; align-items: center; gap: 10px; padding: 16px 22px; border-bottom: 1px solid var(--line); }
+.demo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+.demo-head span { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.demo-body { padding: 26px; display: grid; gap: 20px; }
+.demo-prompt-label { font-size: 13.5px; font-weight: 700; color: var(--muted); }
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1.5px solid var(--line); background: var(--paper); border-radius: 999px; padding: 8px 15px; font-size: 13.5px; font-weight: 600; cursor: pointer; color: var(--ink); }
+.chip:hover { border-color: var(--blue); color: var(--blue-deep); }
+.chip[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+.demo-input-row { display: flex; gap: 10px; }
+.demo-input-row input { flex: 1; border: 1.5px solid var(--line); border-radius: 10px; padding: 12px 14px; font: inherit; font-size: 14.5px; background: var(--paper); color: var(--ink); }
+.demo-input-row input:disabled { opacity: 0.6; }
+.demo-thread { min-height: 64px; display: grid; gap: 10px; }
+.dbubble { max-width: 88%; padding: 11px 15px; border-radius: 14px; font-size: 14.5px; line-height: 1.5; }
+.dbubble.cust { background: var(--paper); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+.dbubble.ai { background: var(--blue-soft); color: var(--ink); border-bottom-right-radius: 4px; justify-self: end; }
+.dbubble.ai b.tag { display: inline-block; font-family: var(--mono); font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; background: var(--blue); color: #fff; border-radius: 4px; padding: 2px 6px; margin-right: 7px; vertical-align: 1px; }
+.filed { display: none; align-items: center; gap: 10px; background: var(--green-soft); border: 1px solid color-mix(in srgb, var(--green) 35%, var(--line)); border-radius: 12px; padding: 12px 16px; font-size: 13.5px; }
+.filed.show { display: flex; }
+.filed b { color: var(--green); font-family: var(--mono); }
+.demo-reset { justify-self: start; }
+.typing-dots { display: none; gap: 4px; padding: 11px 15px; background: var(--blue-soft); border-radius: 14px; border-bottom-right-radius: 4px; justify-self: end; }
+.typing-dots.show { display: inline-flex; }
+.typing-dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); animation: bounce 1.1s infinite ease-in-out; }
+.typing-dots i:nth-child(2) { animation-delay: .15s; } .typing-dots i:nth-child(3) { animation-delay: .3s; }
+@keyframes bounce { 0%,60%,100%{transform:translateY(0);opacity:.5} 30%{transform:translateY(-4px);opacity:1} }
+
+/* ---------- Trust band ---------- */
+.trust-band { padding: 40px 0 0; }
+.trust-inner { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.trust-inner span.chip2 { border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; }
+
+/* ---------- Sections ---------- */
+section { padding: 84px 0; }
+.sec-eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue-deep); margin-bottom: 14px; }
+h2 { font-size: clamp(26px, 3.4vw, 38px); max-width: 22ch; margin-bottom: 14px; }
+.sec-sub { max-width: 58ch; color: var(--muted); font-size: 16px; }
+
+/* ---------- Segmented "built for" selector ---------- */
+.segbar { display: inline-flex; gap: 4px; background: var(--pane); border: 1px solid var(--line); border-radius: 12px; padding: 4px; margin-top: 30px; }
+.seg-btn { border: none; background: transparent; padding: 10px 18px; border-radius: 9px; font-weight: 700; font-size: 13.5px; cursor: pointer; color: var(--muted); }
+.seg-btn[aria-pressed="true"] { background: var(--blue); color: #fff; }
+.seg-panel { display: none; margin-top: 26px; background: var(--pane); border: 1px solid var(--line); border-radius: 16px; padding: 26px 28px; }
+.seg-panel.show { display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: center; }
+.seg-stat { font-size: 32px; font-weight: 800; font-family: var(--mono); color: var(--blue); white-space: nowrap; }
+.seg-stat span { display: block; font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.seg-panel p { color: var(--muted); font-size: 15px; }
+
+/* ---------- Condensed steps ---------- */
+.steps4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 40px; }
+.step4 { background: var(--pane); border: 1px solid var(--line); border-radius: 14px; padding: 22px 20px; }
+.step4 b.n { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 9px; background: var(--blue-soft); color: var(--blue-deep); font-family: var(--mono); font-weight: 700; font-size: 13px; margin-bottom: 14px; }
+.step4 h3 { font-size: 15.5px; margin-bottom: 6px; }
+.step4 p { font-size: 13px; color: var(--muted); }
+
+/* ---------- Features ---------- */
+.feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 40px; }
+.feat-card { background: var(--pane); border: 1px solid var(--line); border-radius: 14px; padding: 22px 20px; }
+.feat-card h3 { font-size: 15.5px; margin-bottom: 8px; }
+.feat-card p { font-size: 13.5px; color: var(--muted); margin-bottom: 12px; }
+.feat-card .metric { font-family: var(--mono); font-size: 12px; color: var(--blue-deep); font-weight: 700; }
+
+/* ---------- FAQ ---------- */
+.faq { margin-top: 36px; border-top: 1px solid var(--line); }
+.faq-item { border-bottom: 1px solid var(--line); }
+.faq-q { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 20px 4px; background: none; border: none; cursor: pointer; text-align: left; font-weight: 700; font-size: 15.5px; color: var(--ink); }
+.faq-q .plus { font-family: var(--mono); font-size: 18px; color: var(--muted); transition: transform .2s; flex: none; }
+.faq-q[aria-expanded="true"] .plus { transform: rotate(45deg); color: var(--blue); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height .28s ease; }
+.faq-a p { padding: 0 4px 20px; color: var(--muted); font-size: 14.5px; max-width: 62ch; }
+
+/* ---------- Email capture ---------- */
+.capture { background: var(--pane); border: 1px solid var(--line); border-radius: 18px; padding: 30px; margin-top: 40px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 26px; align-items: center; }
+.capture h3 { font-size: 18px; margin-bottom: 6px; }
+.capture p { color: var(--muted); font-size: 14px; }
+.capture-form { display: flex; flex-direction: column; gap: 10px; }
+.capture-row { display: flex; gap: 8px; }
+.capture-row input { flex: 1; border: 1.5px solid var(--line); border-radius: 10px; padding: 12px 14px; font: inherit; background: var(--paper); color: var(--ink); }
+.capture-row input:invalid:not(:placeholder-shown) { border-color: #dc2626; }
+.capture-error { font-size: 12.5px; color: #dc2626; display: none; }
+.capture-error.show { display: block; }
+.capture-success { display: none; background: var(--green-soft); border: 1px solid color-mix(in srgb, var(--green) 35%, var(--line)); border-radius: 10px; padding: 12px 14px; font-size: 13.5px; color: var(--green); font-weight: 600; }
+.capture-success.show { display: block; }
+.capture-fine { font-size: 11.5px; color: var(--muted); }
+
+/* ---------- Sticky bottom CTA ---------- */
+.sticky-cta { position: fixed; left: 0; right: 0; bottom: -100px; z-index: 60; transition: bottom .3s ease; }
+.sticky-cta.show { bottom: 0; }
+.sticky-inner { background: var(--ink); color: var(--paper); border-radius: 16px 16px 0 0; margin-inline: auto; width: min(720px, 100% - 24px); padding: 14px 18px; display: flex; align-items: center; gap: 16px; box-shadow: 0 -14px 40px -18px rgba(0,0,0,0.4); }
+.sticky-inner p { font-size: 13.5px; font-weight: 600; flex: 1; }
+.sticky-close { background: none; border: none; color: color-mix(in srgb, var(--paper) 65%, transparent); font-size: 18px; cursor: pointer; padding: 4px 8px; flex: none; }
+.sticky-inner .btn-primary { flex: none; }
+
+/* ---------- Final CTA ---------- */
+.final-cta { background: linear-gradient(155deg, var(--blue-deep), var(--blue)); color: #fff; border-radius: 20px; padding: clamp(40px, 6vw, 68px); text-align: center; }
+.final-cta h2 { color: #fff; margin-inline: auto; }
+.final-cta p { color: color-mix(in srgb, #fff 85%, transparent); margin: 14px auto 26px; max-width: 46ch; }
+
+footer { border-top: 1px solid var(--line); padding: 26px 0 100px; }
+.foot-row { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: baseline; font-size: 13px; color: var(--muted); }
+.foot-row .right { margin-left: auto; }
+
+@media (max-width: 880px) {
+  .head-links { display: none; }
+  .steps4, .feat-grid { grid-template-columns: 1fr 1fr; }
+  .capture { grid-template-columns: 1fr; }
+  .seg-panel.show { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .steps4, .feat-grid { grid-template-columns: 1fr; }
+  .demo-body { padding: 18px; }
+  .sticky-inner { flex-wrap: wrap; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .typing-dots i { animation: none; opacity: .8; }
+  .sticky-cta { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="shell head-row">
+    <a class="word" href="#top">base<b>360</b></a>
+    <nav class="head-links" aria-label="Primary">
+      <a href="#demo">Try it live</a>
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-primary btn-sm" href="#top">Start free</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero shell">
+    <p class="eyebrow reveal">No login, no sales call — just try it</p>
+    <h1 class="hero-h reveal">See your comment answered before you sign up for anything.</h1>
+    <p class="hero-sub reveal">Type what a customer might comment on your next post. Watch Base360's AI reply and file it as a lead — in the box below, right now.</p>
+    <div class="hero-cta reveal">
+      <a class="btn btn-primary" href="#demo">Try it below ↓</a>
+      <a class="btn btn-ghost" href="#capture">Email me a 2-min tour instead</a>
+    </div>
+    <p class="hero-fine reveal">Free for your first 100 conversations · No credit card · Cancel anytime</p>
+
+    <!-- ============ LIVE DEMO ============ -->
+    <div class="demo-wrap reveal" id="demo">
+      <div class="demo">
+        <div class="demo-head"><span class="demo-dot" aria-hidden="true"></span><span>LIVE DEMO — this is a real simulation, not a video</span></div>
+        <div class="demo-body">
+          <div>
+            <p class="demo-prompt-label">Pick a comment, or write your own:</p>
+            <div class="chip-row" role="group" aria-label="Example comments">
+              <button class="chip" type="button" data-demo="price" aria-pressed="false">"how much is this?"</button>
+              <button class="chip" type="button" data-demo="ship" aria-pressed="false">"do you ship to Canada?"</button>
+              <button class="chip" type="button" data-demo="stock" aria-pressed="false">"is this back in stock?"</button>
+            </div>
+          </div>
+          <form class="demo-input-row" id="demoForm">
+            <label class="sr-only" for="demoInput">Write your own comment</label>
+            <input id="demoInput" type="text" placeholder="…or type your own comment" maxlength="140" />
+            <button class="btn btn-primary btn-sm" type="submit">Send as customer</button>
+          </form>
+          <div class="demo-thread" id="demoThread" aria-live="polite">
+            <p class="mono" style="color:var(--muted);font-size:13px;">Nothing sent yet — pick a comment above to see the AI reply.</p>
+          </div>
+          <div class="filed" id="demoFiled"><b>✓ Filed to CRM</b><span>New contact added as a high-intent lead — no one on your team touched it.</span></div>
+          <button class="btn btn-ghost btn-sm demo-reset" id="demoReset" type="button" hidden>Try another comment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="trust-band">
+    <div class="shell trust-inner reveal">
+      <span>Connects to:</span>
+      <span class="chip2">Instagram</span><span class="chip2">TikTok</span><span class="chip2">WhatsApp</span><span class="chip2">SMS</span><span class="chip2">Calls</span><span class="chip2">Email</span>
+    </div>
+  </div>
+
+  <!-- ============ Segmented "built for" ============ -->
+  <section>
+    <div class="shell">
+      <p class="sec-eyebrow reveal">Built for how you actually sell</p>
+      <h2 class="reveal">Pick what your team spends the most time on.</h2>
+      <p class="sec-sub reveal">Base360 does all of it — but here's the number that matters most depending on where you're bleeding time today.</p>
+      <div class="segbar reveal" role="group" aria-label="Choose your focus">
+        <button class="seg-btn" type="button" data-seg="comments" aria-pressed="true">Comments &amp; DMs</button>
+        <button class="seg-btn" type="button" data-seg="support" aria-pressed="false">Support volume</button>
+        <button class="seg-btn" type="button" data-seg="sales" aria-pressed="false">Sales follow-up</button>
+      </div>
+      <div class="seg-panel show reveal" data-panel="comments">
+        <div class="seg-stat">0<span>missed / day</span></div>
+        <p>Every Instagram and TikTok comment gets a public reply in seconds, then a DM if it needs one — so nothing sits there unanswered while your team sleeps.</p>
+      </div>
+      <div class="seg-panel" data-panel="support">
+        <div class="seg-stat">12s<span>median reply</span></div>
+        <p>Routine questions — shipping, sizing, stock — get answered instantly by AI, so your support team only sees the messages that actually need a human.</p>
+      </div>
+      <div class="seg-panel" data-panel="sales">
+        <div class="seg-stat">38<span>leads routed / day</span></div>
+        <p>Every high-intent conversation is flagged and handed straight to sales, with full context — plus an AI voice follow-up call if it's worth it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Condensed how it works ============ -->
+  <section id="how">
+    <div class="shell">
+      <p class="sec-eyebrow reveal">How it works</p>
+      <h2 class="reveal">Four steps, none of them manual.</h2>
+      <div class="steps4 reveal">
+        <div class="step4"><b class="n">01</b><h3>Comment arrives</h3><p>On any connected channel — comment, DM, WhatsApp, SMS, call, or email.</p></div>
+        <div class="step4"><b class="n">02</b><h3>AI agent replies</h3><p>In your brand's voice, in seconds, in public and in private.</p></div>
+        <div class="step4"><b class="n">03</b><h3>Filed automatically</h3><p>High-intent conversations become CRM leads with full context attached.</p></div>
+        <div class="step4"><b class="n">04</b><h3>Nurtured to close</h3><p>Follow-up calls and email flows run until the customer buys.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Features ============ -->
+  <section>
+    <div class="shell">
+      <p class="sec-eyebrow reveal">What's inside</p>
+      <h2 class="reveal">Four things. One system.</h2>
+      <div class="feat-grid reveal">
+        <div class="feat-card"><h3>Unified inbox</h3><p>Every channel, one place. Reply without opening a single social app.</p><span class="metric">0 missed / day</span></div>
+        <div class="feat-card"><h3>AI agents</h3><p>Build agents for any task — replying, qualifying, calling with an AI voice.</p><span class="metric">Live in 10 min</span></div>
+        <div class="feat-card"><h3>Built-in CRM</h3><p>Every conversation becomes a lead. High-intent ones reach sales instantly.</p><span class="metric">38 routed / day</span></div>
+        <div class="feat-card"><h3>Marketing &amp; subscribers</h3><p>Capture, send, and track — tied to the same customer record.</p><span class="metric">+38% growth / mo</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section id="faq">
+    <div class="shell">
+      <p class="sec-eyebrow reveal">Before you ask</p>
+      <h2 class="reveal">Questions people actually have.</h2>
+      <div class="faq reveal">
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Does this replace my team, or work alongside them?<span class="plus">+</span></button>
+          <div class="faq-a"><p>Alongside. The AI handles the repetitive first response and routine questions; anything high-intent or complicated gets handed to your team with full context — not dumped on them cold.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">What if the AI gets something wrong?<span class="plus">+</span></button>
+          <div class="faq-a"><p>You set what it's allowed to say — pricing, policies, tone — and can review every conversation. If it's ever unsure, it can hand off to a human instead of guessing.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Which platforms does it actually connect to?<span class="plus">+</span></button>
+          <div class="faq-a"><p>Instagram and TikTok comments and DMs, WhatsApp, SMS, phone calls, and email — all in one inbox, from day one.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Is there really a free plan?<span class="plus">+</span></button>
+          <div class="faq-a"><p>Yes — your first 100 conversations are free, no credit card required, so you can see it work on your own comments before paying anything.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">How long does setup take?<span class="plus">+</span></button>
+          <div class="faq-a"><p>Most teams connect their first channel and have an AI agent replying within about 10 minutes.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Email capture ============ -->
+  <section id="capture">
+    <div class="shell">
+      <div class="capture reveal">
+        <div>
+          <h3>Not ready to sign up? We'll send the tour instead.</h3>
+          <p>A 2-minute walkthrough of exactly what you just tried above — plus how to connect your first channel.</p>
+        </div>
+        <div>
+          <form class="capture-form" id="captureForm" novalidate>
+            <div class="capture-row">
+              <label class="sr-only" for="captureEmail">Work email</label>
+              <input id="captureEmail" type="email" placeholder="you@yourbrand.com" required />
+              <button class="btn btn-primary btn-sm" type="submit">Email me the tour</button>
+            </div>
+            <p class="capture-error" id="captureError" aria-live="polite">Enter a valid email address so we know where to send it.</p>
+            <p class="capture-fine">One email. No spam, unsubscribe anytime.</p>
+          </form>
+          <p class="capture-success" id="captureSuccess" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Final CTA ============ -->
+  <section>
+    <div class="shell">
+      <div class="final-cta reveal">
+        <h2>Your next comment shouldn't wait for Monday.</h2>
+        <p>Connect Instagram, TikTok, WhatsApp and email in minutes, and let the AI take the next one.</p>
+        <a class="btn btn-ghost" style="background:#fff;color:var(--blue-deep)" href="#top">Start free — 2 min setup</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="shell foot-row">
+    <a class="word" href="#top" style="font-size:15px;">base<b>360</b>.ai</a>
+    <span>One system for every conversation.</span>
+    <span class="right">© 2026 Base360</span>
+  </div>
+</footer>
+
+<!-- ============ Sticky bottom CTA ============ -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="sticky-inner">
+    <p>Ready when you are — first 100 conversations are free.</p>
+    <a class="btn btn-primary btn-sm" href="#top">Start free</a>
+    <button class="sticky-close" id="stickyClose" aria-label="Dismiss this bar">✕</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---- scroll reveal ---- */
+  var els = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window && !reduced) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: "0px 0px -24px 0px" });
+    els.forEach(function (el) { io.observe(el); });
+  } else {
+    els.forEach(function (el) { el.classList.add("in"); });
+  }
+
+  /* ---- live demo ---- */
+  var responses = {
+    price: "It's $49 with free shipping this week! Want me to hold one for you?",
+    ship: "Yes — Canada shipping is $6 and takes 4–6 business days. Want me to add it to your cart?",
+    stock: "Back in stock as of today! I can send you the checkout link right now.",
+    custom_ship: "Shipping details are on their way to your inbox now — and I've noted your question in case you need anything else.",
+    custom_price: "I've sent over current pricing and any active offers. Want me to hold an item for you?",
+    custom_stock: "Checked — I've sent you the current availability and a link to grab one if it's in stock.",
+    fallback: "Good question — I've sent you the details and flagged this as high-intent, so our team can jump in personally if you need more."
+  };
+  var thread = document.getElementById("demoThread");
+  var filed = document.getElementById("demoFiled");
+  var chips = document.querySelectorAll(".chip[data-demo]");
+  var form = document.getElementById("demoForm");
+  var input = document.getElementById("demoInput");
+  var resetBtn = document.getElementById("demoReset");
+  var running = false;
+
+  function pickResponse(text, key) {
+    if (key) return responses[key];
+    var t = text.toLowerCase();
+    if (t.indexOf("ship") > -1) return responses.custom_ship;
+    if (t.indexOf("price") > -1 || t.indexOf("cost") > -1 || t.indexOf("much") > -1) return responses.custom_price;
+    if (t.indexOf("stock") > -1 || t.indexOf("available") > -1) return responses.custom_stock;
+    return responses.fallback;
+  }
+
+  function runDemo(custText, key) {
+    if (running) return;
+    running = true;
+    chips.forEach(function (c) { c.setAttribute("aria-pressed", key && c.dataset.demo === key ? "true" : "false"); c.disabled = true; });
+    input.disabled = true;
+    form.querySelector("button").disabled = true;
+
+    thread.innerHTML = "";
+    filed.classList.remove("show");
+    resetBtn.hidden = true;
+
+    var custBubble = document.createElement("p");
+    custBubble.className = "dbubble cust";
+    custBubble.textContent = custText;
+    thread.appendChild(custBubble);
+
+    var typing = document.createElement("div");
+    typing.className = "typing-dots show";
+    typing.innerHTML = "<i></i><i></i><i></i>";
+    thread.appendChild(typing);
+
+    var delay = reduced ? 60 : 900;
+    setTimeout(function () {
+      typing.remove();
+      var aiBubble = document.createElement("p");
+      aiBubble.className = "dbubble ai";
+      aiBubble.innerHTML = '<b class="tag">AI</b>' + pickResponse(custText, key);
+      thread.appendChild(aiBubble);
+
+      setTimeout(function () {
+        filed.classList.add("show");
+        resetBtn.hidden = false;
+        chips.forEach(function (c) { c.disabled = false; });
+        input.disabled = false;
+        form.querySelector("button").disabled = false;
+        running = false;
+      }, reduced ? 60 : 500);
+    }, delay);
+  }
+
+  chips.forEach(function (chip) {
+    chip.addEventListener("click", function () { runDemo(chip.textContent.replace(/"/g, ""), chip.dataset.demo); });
+  });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var val = input.value.trim();
+    if (!val) return;
+    runDemo(val, null);
+    input.value = "";
+  });
+  resetBtn.addEventListener("click", function () {
+    thread.innerHTML = '<p class="mono" style="color:var(--muted);font-size:13px;">Nothing sent yet — pick a comment above to see the AI reply.</p>';
+    filed.classList.remove("show");
+    resetBtn.hidden = true;
+    chips.forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+  });
+
+  /* ---- segmented selector ---- */
+  var segBtns = document.querySelectorAll(".seg-btn");
+  var segPanels = document.querySelectorAll(".seg-panel");
+  segBtns.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      segBtns.forEach(function (b) { b.setAttribute("aria-pressed", "false"); });
+      btn.setAttribute("aria-pressed", "true");
+      segPanels.forEach(function (p) { p.classList.toggle("show", p.dataset.panel === btn.dataset.seg); });
+    });
+  });
+
+  /* ---- FAQ accordion ---- */
+  document.querySelectorAll(".faq-q").forEach(function (btn) {
+    var panel = btn.nextElementSibling;
+    btn.addEventListener("click", function () {
+      var open = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", String(!open));
+      panel.style.maxHeight = open ? "0px" : panel.scrollHeight + "px";
+    });
+  });
+
+  /* ---- email capture ---- */
+  var captureForm = document.getElementById("captureForm");
+  var captureError = document.getElementById("captureError");
+  var captureSuccess = document.getElementById("captureSuccess");
+  var captureEmail = document.getElementById("captureEmail");
+  captureForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!captureEmail.checkValidity()) {
+      captureError.classList.add("show");
+      captureEmail.focus();
+      return;
+    }
+    captureError.classList.remove("show");
+    captureSuccess.textContent = "Sent — check " + captureEmail.value + " in the next minute or two.";
+    captureSuccess.classList.add("show");
+    captureForm.hidden = true;
+  });
+
+  /* ---- sticky CTA ---- */
+  var stickyCta = document.getElementById("stickyCta");
+  var stickyClose = document.getElementById("stickyClose");
+  var dismissed = false;
+  try { dismissed = sessionStorage.getItem("base360-sticky-dismissed") === "1"; } catch (err) {}
+  var heroEl = document.querySelector(".hero");
+  if ("IntersectionObserver" in window && heroEl) {
+    var heroIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (dismissed) return;
+        stickyCta.classList.toggle("show", !entry.isIntersecting);
+      });
+    }, { threshold: 0 });
+    heroIo.observe(heroEl);
+  }
+  stickyClose.addEventListener("click", function () {
+    dismissed = true;
+    stickyCta.classList.remove("show");
+    try { sessionStorage.setItem("base360-sticky-dismissed", "1"); } catch (err) {}
+  });
+})();
+</script>
+</body>
+</html>
