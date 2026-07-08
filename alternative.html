@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Base360 — alternative landing page design: the switchboard ledger." />
+<title>Base360 — One system for every conversation</title>
+<style>
+  /* ==========================================================
+     Base360 — alternative design: "The switchboard ledger"
+     A vertical indigo wire threads the page; the hero story is
+     told as a paper trail of real artifacts along that wire.
+     ========================================================== */
+  :root {
+    --ground: #f2f3f9;
+    --paper: #ffffff;
+    --ink: #191834;
+    --muted: #63658a;
+    --wire: #4c45e4;
+    --wire-ink: #ffffff;
+    --wire-soft: rgba(76, 69, 228, 0.13);
+    --signal: #e8402d;
+    --line: #d9dbee;
+    --card-shadow: 0 22px 48px -26px rgba(25, 24, 82, 0.35);
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #131223;
+      --paper: #1c1b30;
+      --ink: #ecebf8;
+      --muted: #9a9cc0;
+      --wire: #8f8aff;
+      --wire-ink: #131223;
+      --wire-soft: rgba(143, 138, 255, 0.16);
+      --signal: #ff6a58;
+      --line: #2c2b49;
+      --card-shadow: 0 22px 48px -26px rgba(0, 0, 0, 0.65);
+    }
+  }
+  :root[data-theme="light"] {
+    --ground: #f2f3f9; --paper: #ffffff; --ink: #191834; --muted: #63658a;
+    --wire: #4c45e4; --wire-ink: #ffffff; --wire-soft: rgba(76, 69, 228, 0.13);
+    --signal: #e8402d; --line: #d9dbee;
+    --card-shadow: 0 22px 48px -26px rgba(25, 24, 82, 0.35);
+  }
+  :root[data-theme="dark"] {
+    --ground: #131223; --paper: #1c1b30; --ink: #ecebf8; --muted: #9a9cc0;
+    --wire: #8f8aff; --wire-ink: #131223; --wire-soft: rgba(143, 138, 255, 0.16);
+    --signal: #ff6a58; --line: #2c2b49;
+    --card-shadow: 0 22px 48px -26px rgba(0, 0, 0, 0.65);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  .shell { width: min(1060px, 100% - 44px); margin-inline: auto; }
+  a { color: inherit; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--wire); outline-offset: 3px; border-radius: 4px; }
+
+  .mono {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .btn {
+    display: inline-block; text-decoration: none; cursor: pointer;
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 15px 26px; border: 1.5px solid var(--ink); color: var(--ink);
+    background: transparent; border-radius: 3px;
+    transition: background 0.16s, color 0.16s, transform 0.16s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-solid { background: var(--wire); border-color: var(--wire); color: var(--wire-ink); }
+  .btn-solid:hover { filter: brightness(1.07); }
+  .btn-line:hover { background: var(--ink); color: var(--ground); }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* ============ Header ============ */
+  header {
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--ground) 86%, transparent);
+    backdrop-filter: blur(10px);
+    position: sticky; top: 0; z-index: 40;
+  }
+  .head-row { display: flex; align-items: baseline; gap: 24px; padding: 20px 0; }
+  .wordmark { font-family: var(--serif); font-size: 24px; font-weight: 700; letter-spacing: -0.01em; text-decoration: none; }
+  .wordmark span { color: var(--wire); }
+  .head-tag { margin-right: auto; }
+  .head-cta { font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border-bottom: 1.5px solid var(--wire); padding-bottom: 3px; color: var(--ink); }
+  .head-cta:hover { color: var(--wire); }
+
+  /* ============ Hero ============ */
+  .hero { padding: 92px 0 0; }
+  .hero-eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 34px; }
+  .hero-eyebrow::before { content: ""; width: 44px; height: 1.5px; background: var(--wire); }
+  h1 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: clamp(44px, 7.2vw, 88px);
+    line-height: 1.02; letter-spacing: -0.022em;
+    text-wrap: balance;
+    max-width: 15ch;
+  }
+  h1 em { font-style: italic; color: var(--wire); }
+  .hero-lede {
+    max-width: 58ch; font-size: 17.5px; color: var(--muted);
+    margin: 30px 0 40px;
+  }
+  .hero-lede strong { color: var(--ink); font-weight: 600; }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; padding-bottom: 72px; }
+
+  /* Ticker */
+  .ticker-band { border-block: 1px solid var(--line); background: var(--paper); overflow: hidden; }
+  .ticker { display: flex; width: max-content; animation: tick 46s linear infinite; }
+  .ticker-band:hover .ticker { animation-play-state: paused; }
+  @keyframes tick { to { transform: translateX(-50%); } }
+  .tick-item {
+    display: inline-flex; align-items: baseline; gap: 10px;
+    font-family: var(--mono); font-size: 12px; white-space: nowrap;
+    padding: 14px 26px; border-right: 1px solid var(--line); color: var(--muted);
+  }
+  .tick-item b { color: var(--ink); font-weight: 600; }
+  .tick-item .ch { color: var(--wire); letter-spacing: 0.1em; }
+  .tick-item .hot { color: var(--signal); }
+
+  /* ============ Sections ============ */
+  section { padding: 104px 0; }
+  .sec-label { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; }
+  .sec-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: clamp(32px, 4.4vw, 52px);
+    line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance;
+    max-width: 22ch;
+  }
+  h2 em { font-style: italic; color: var(--wire); }
+  .sec-sub { max-width: 56ch; color: var(--muted); font-size: 16.5px; margin-top: 18px; }
+
+  /* ============ Problem ledger ============ */
+  .loss-list { margin-top: 54px; border-top: 1px solid var(--line); }
+  .loss-row {
+    display: grid; grid-template-columns: 64px 1fr 1.1fr; gap: 26px; align-items: baseline;
+    padding: 30px 0; border-bottom: 1px solid var(--line);
+  }
+  .loss-mark { font-family: var(--mono); font-size: 20px; color: var(--signal); }
+  .loss-row h3 { font-family: var(--serif); font-size: clamp(21px, 2.6vw, 28px); font-weight: 700; letter-spacing: -0.01em; }
+  .loss-row p { color: var(--muted); font-size: 15px; }
+
+  /* ============ The wire / story ============ */
+  .story { position: relative; }
+  .story-intro { margin-bottom: 90px; }
+  .thread { position: relative; padding: 10px 0 30px; }
+  .wire-track {
+    position: absolute; top: 0; bottom: 0; left: 50%;
+    width: 2px; transform: translateX(-50%);
+    background: var(--wire-soft);
+  }
+  .wire-fill { position: absolute; top: 0; left: 0; width: 100%; height: 0; background: var(--wire); }
+
+  .node { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 0 84px; padding: 44px 0; }
+  .node-dot {
+    position: absolute; left: 50%; top: 58px; transform: translate(-50%, 0);
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--ground); border: 2px solid var(--wire);
+    display: grid; place-items: center;
+    font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--wire);
+    z-index: 2;
+  }
+  .node-body { grid-column: 1; text-align: right; justify-self: end; max-width: 430px; }
+  .node:nth-child(even) .node-body { grid-column: 2; text-align: left; justify-self: start; }
+  .node-step { margin-bottom: 14px; }
+  .node h3 { font-family: var(--serif); font-size: 23px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; margin-bottom: 8px; text-wrap: balance; }
+  .node-copy { color: var(--muted); font-size: 14.5px; max-width: 44ch; }
+  .node:nth-child(odd) .node-copy { margin-left: auto; }
+
+  .artifact { grid-column: 2; grid-row: 1; justify-self: start; align-self: start; width: min(430px, 100%); }
+  .node:nth-child(even) .artifact { grid-column: 1; justify-self: end; }
+
+  .card {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 8px;
+    box-shadow: var(--card-shadow); overflow: hidden;
+  }
+  .card-meta {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); padding: 10px 16px; border-bottom: 1px solid var(--line);
+    display: flex; justify-content: space-between; gap: 12px;
+  }
+  .card-meta b { color: var(--wire); font-weight: 600; }
+  .card-meta .hot { color: var(--signal); }
+  .card-pad { padding: 16px; }
+
+  /* artifact 1 — tiktok comment */
+  .tt-row { display: flex; gap: 14px; align-items: center; }
+  .tt-thumb {
+    flex: none; width: 64px; height: 84px; border-radius: 6px; position: relative;
+    background: linear-gradient(160deg, #33308f, #8d2fb4 55%, #d63384);
+  }
+  .tt-thumb::after { content: "▶"; position: absolute; inset: 0; display: grid; place-items: center; color: rgba(255,255,255,0.9); font-size: 15px; }
+  .tt-comment b { display: block; font-size: 13px; }
+  .tt-comment q { quotes: "“" "”"; font-family: var(--serif); font-size: 19px; font-style: italic; line-height: 1.3; display: block; margin-top: 4px; }
+
+  /* artifact 2 — reply */
+  .reply q { quotes: "“" "”"; font-size: 14.5px; line-height: 1.55; display: block; }
+  .ai-tag {
+    display: inline-block; font-family: var(--mono); font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em;
+    background: var(--wire); color: var(--wire-ink); border-radius: 3px; padding: 2px 7px; vertical-align: 2px;
+  }
+  .reply-from { font-size: 12.5px; font-weight: 600; margin-bottom: 8px; }
+
+  /* artifact 3 — dm */
+  .dm { display: grid; gap: 9px; }
+  .dm p { max-width: 88%; font-size: 13.5px; line-height: 1.5; padding: 9px 13px; border-radius: 12px; }
+  .dm .them { background: var(--wire-soft); border-bottom-left-radius: 4px; justify-self: start; }
+  .dm .me { background: var(--wire); color: var(--wire-ink); border-bottom-right-radius: 4px; justify-self: end; }
+
+  /* artifact 4 — crm record */
+  .crm-name { font-family: var(--serif); font-size: 20px; font-weight: 700; margin-bottom: 3px; }
+  .crm-handle { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; }
+  .crm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border-top: 1px solid var(--line); margin-top: 14px; }
+  .crm-cell { background: var(--paper); padding: 10px 14px; }
+  .crm-cell i { display: block; font-style: normal; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .crm-cell b { font-size: 13px; font-weight: 600; }
+  .crm-cell .hot { color: var(--signal); }
+
+  /* artifact 5 — call transcript */
+  .transcript { font-family: var(--mono); font-size: 12px; line-height: 1.75; display: grid; gap: 8px; }
+  .transcript span { display: block; color: var(--muted); }
+  .transcript b { color: var(--wire); font-weight: 700; margin-right: 8px; }
+  .transcript .cust b { color: var(--signal); }
+  .wave { display: flex; gap: 3px; align-items: center; height: 22px; margin-top: 12px; }
+  .wave i { width: 3px; border-radius: 99px; background: var(--wire); height: 30%; animation: wave 1.1s ease-in-out infinite; }
+  .wave i:nth-child(2n) { animation-delay: 0.14s; }
+  .wave i:nth-child(3n) { animation-delay: 0.28s; }
+  .wave i:nth-child(5n) { animation-delay: 0.42s; }
+  @keyframes wave { 0%, 100% { height: 22%; } 50% { height: 100%; } }
+
+  /* artifact 6 — email */
+  .email-subject { font-family: var(--serif); font-size: 19px; font-weight: 700; line-height: 1.3; margin-bottom: 8px; }
+  .email-body { font-size: 13.5px; color: var(--muted); margin-bottom: 14px; }
+  .email-cta { display: inline-block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--wire); color: var(--wire-ink); padding: 9px 16px; border-radius: 3px; }
+  .email-foot { display: flex; gap: 16px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border-top: 1px solid var(--line); padding: 10px 16px; }
+  .email-foot .ok { color: var(--wire); }
+  .email-foot .hot { color: var(--signal); font-weight: 700; }
+
+  /* pull quote */
+  .feeling { padding: 30px 0 0; }
+  .feeling blockquote {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(24px, 3.4vw, 38px); line-height: 1.28; letter-spacing: -0.01em;
+    max-width: 26ch; margin-inline: auto; text-align: center; text-wrap: balance;
+  }
+  .feeling strong { color: var(--wire); font-weight: 700; }
+  .feeling figcaption { text-align: center; margin-top: 22px; }
+
+  /* ============ Features ledger ============ */
+  .ledger { margin-top: 58px; border-top: 1px solid var(--line); counter-reset: feat; }
+  .ledger-row {
+    display: grid; grid-template-columns: 84px 1.1fr 1fr; gap: 30px;
+    padding: 40px 0; border-bottom: 1px solid var(--line);
+  }
+  .ledger-num { font-family: var(--mono); font-size: 13px; color: var(--wire); padding-top: 8px; }
+  .ledger-row h3 { font-family: var(--serif); font-size: clamp(22px, 2.8vw, 30px); font-weight: 700; letter-spacing: -0.015em; line-height: 1.2; text-wrap: balance; }
+  .ledger-row > p { color: var(--muted); font-size: 15px; }
+  .ledger-spec { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 7px; }
+  .spec {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;
+    border: 1px solid var(--line); color: var(--muted); border-radius: 99px; padding: 5px 11px;
+  }
+  .spec.on { border-color: var(--wire); color: var(--wire); }
+
+  /* ============ CTA ============ */
+  .cta-panel {
+    background: var(--wire); color: var(--wire-ink);
+    border-radius: 10px; padding: clamp(48px, 7vw, 84px) clamp(28px, 6vw, 84px);
+    display: grid; gap: 26px; justify-items: start;
+  }
+  .cta-panel .mono { color: color-mix(in srgb, var(--wire-ink) 75%, transparent); }
+  .cta-panel h2 { color: inherit; max-width: 18ch; }
+  .cta-panel h2 em { color: inherit; text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 8px; }
+  .cta-panel .btn { border-color: var(--wire-ink); color: var(--wire-ink); }
+  .cta-panel .btn:hover { background: var(--wire-ink); color: var(--wire); }
+  .cta-fine { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.8; }
+
+  /* ============ Footer ============ */
+  footer { border-top: 1px solid var(--line); padding: 30px 0 44px; }
+  .foot-row { display: flex; flex-wrap: wrap; gap: 10px 28px; align-items: baseline; }
+  .foot-row .right { margin-left: auto; }
+
+  /* ============ Responsive ============ */
+  @media (max-width: 820px) {
+    section { padding: 74px 0; }
+    .loss-row { grid-template-columns: 40px 1fr; }
+    .loss-row p { grid-column: 2; }
+    .ledger-row { grid-template-columns: 52px 1fr; }
+    .ledger-row > p { grid-column: 2; }
+    .wire-track { left: 16px; }
+    .node, .node:nth-child(even) { display: grid; grid-template-columns: 1fr; gap: 18px; padding: 34px 0 34px 52px; }
+    .node-dot { left: 16px; top: 40px; }
+    .node-body, .node:nth-child(even) .node-body { grid-column: 1; text-align: left; justify-self: start; }
+    .node:nth-child(odd) .node-copy { margin-left: 0; }
+    .artifact, .node:nth-child(even) .artifact { grid-column: 1; grid-row: auto; justify-self: start; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .ticker { animation: none; flex-wrap: wrap; width: 100%; }
+    .wave i { animation: none; height: 60%; }
+    .wire-fill { height: 100% !important; }
+  }
+</style>
+
+<header>
+  <div class="shell head-row">
+    <a class="wordmark" href="#top">Base<span>360</span></a>
+    <span class="mono head-tag">base360.ai — one system for every conversation</span>
+    <a class="head-cta" href="#cta">Get started</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <div class="hero">
+    <div class="shell">
+      <p class="mono hero-eyebrow reveal">Switchboard for B2C brands</p>
+      <h1 class="reveal">Every conversation, every channel, every lead — <em>in one system.</em></h1>
+      <p class="hero-lede reveal">Instagram and TikTok comments, DMs, WhatsApp, SMS, calls, email, newsletters — Base360 puts them on <strong>one wire</strong>, answers them with <strong>AI agents</strong>, and files every one as a <strong>tracked lead</strong>. One place to reach customers, run the team, and close.</p>
+      <div class="hero-actions reveal">
+        <a class="btn btn-solid" href="#cta">Get started free</a>
+        <a class="btn btn-line" href="#wire">Follow one comment ↓</a>
+      </div>
+    </div>
+    <div class="ticker-band" aria-label="Live activity across channels">
+      <div class="ticker" id="ticker">
+        <span class="tick-item">19:42:07 <span class="ch">TIKTOK</span> @mia.styles — <b>“how much is this?”</b> <span class="hot">⚑ would-be missed</span></span>
+        <span class="tick-item">19:42:11 <span class="ch">TIKTOK</span> AI agent replied publicly <b>· 4s</b></span>
+        <span class="tick-item">19:42:16 <span class="ch">DM</span> conversation opened · AI handling</span>
+        <span class="tick-item">19:44:02 <span class="ch">WHATSAPP</span> reorder request <b>· AI replied</b></span>
+        <span class="tick-item">19:45:18 <span class="ch">CRM</span> Mia Santoso → <b class="hot">HIGH-INTENT</b> · handed to sales</span>
+        <span class="tick-item">19:47:00 <span class="ch">CALL</span> AI voice walkthrough <b>· 3m 12s</b></span>
+        <span class="tick-item">19:52:36 <span class="ch">EMAIL</span> welcome flow sent · opened · clicked</span>
+        <span class="tick-item">20:04:51 <span class="ch">CRM</span> Mia Santoso → <b>WON 🛒</b></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PROBLEM ============ -->
+  <section id="problem">
+    <div class="shell">
+      <p class="mono sec-label reveal">The problem — what slips through</p>
+      <h2 class="reveal">Your customers are everywhere. Your team can't be.</h2>
+      <p class="sec-sub reveal">B2C brands are buried in messages from every direction — plus newsletters and marketing in yet another set of tools. Here's the daily ledger of what that costs:</p>
+      <div class="loss-list">
+        <div class="loss-row reveal">
+          <span class="loss-mark" aria-hidden="true">✕</span>
+          <h3>Comments go unanswered</h3>
+          <p>Every ignored comment is a customer who bought somewhere else — and everyone watching saw the silence.</p>
+        </div>
+        <div class="loss-row reveal">
+          <span class="loss-mark" aria-hidden="true">✕</span>
+          <h3>Leads slip through</h3>
+          <p>A question in a DM is a lead. Without one system it never reaches sales — it just scrolls away.</p>
+        </div>
+        <div class="loss-row reveal">
+          <span class="loss-mark" aria-hidden="true">✕</span>
+          <h3>No single view of the customer</h3>
+          <p>Five inboxes, three tools, zero context. Nobody knows who said what, where, or what happened next.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE WIRE ============ -->
+  <section class="story" id="wire">
+    <div class="shell">
+      <div class="story-intro">
+        <p class="mono sec-label reveal">Exhibit A — one comment, end to end</p>
+        <h2 class="reveal">Follow one TikTok comment down the wire.</h2>
+        <p class="sec-sub reveal">This is the paper trail Base360 leaves behind when a single comment gets handled entirely by AI — no one on your team lifted a finger.</p>
+      </div>
+
+      <div class="thread" id="thread">
+        <div class="wire-track" aria-hidden="true"><span class="wire-fill" id="wire-fill"></span></div>
+
+        <!-- 1 -->
+        <div class="node reveal">
+          <span class="node-dot" aria-hidden="true">1</span>
+          <div class="node-body">
+            <p class="mono node-step">Step 1 · 19:42:07</p>
+            <h3>A customer comments on a TikTok post</h3>
+            <p class="node-copy">The moment most brands miss. Base360 catches it the second it lands.</p>
+          </div>
+          <div class="artifact card">
+            <div class="card-meta"><span><b>TikTok</b> · public comment</span><span class="hot">unanswered</span></div>
+            <div class="card-pad tt-row">
+              <span class="tt-thumb" aria-hidden="true"></span>
+              <div class="tt-comment"><b>@mia.styles</b><q>how much is this? 😍</q></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="node reveal">
+          <span class="node-dot" aria-hidden="true">2</span>
+          <div class="node-body">
+            <p class="mono node-step">Step 2 · 4 seconds later</p>
+            <h3>The AI agent replies publicly, then slides into their DMs</h3>
+            <p class="node-copy">Answered in public for everyone to see — then taken private while the intent is hot.</p>
+          </div>
+          <div class="artifact card">
+            <div class="card-meta"><span><b>TikTok</b> · reply</span><span>replied in 4s</span></div>
+            <div class="card-pad reply">
+              <p class="reply-from">yourbrand <span class="ai-tag">AI agent</span></p>
+              <q>It's $49 with free shipping this week! Just sent you the details 💜</q>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="node reveal">
+          <span class="node-dot" aria-hidden="true">3</span>
+          <div class="node-body">
+            <p class="mono node-step">Step 3 · in the DMs</p>
+            <h3>The AI explains the offering and answers questions</h3>
+            <p class="node-copy">Every objection handled in your brand's voice — as long as it takes.</p>
+          </div>
+          <div class="artifact card">
+            <div class="card-meta"><span><b>DM</b> · @mia.styles</span><span>AI handling</span></div>
+            <div class="card-pad dm">
+              <p class="them">Hey Mia! 👋 The set you asked about is $49 — free shipping this week.</p>
+              <p class="me">is it good for sensitive skin?</p>
+              <p class="them">Totally — fragrance-free and dermatologist tested. Want me to hold one for you?</p>
+              <p class="me">yes please!! 🙌</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="node reveal">
+          <span class="node-dot" aria-hidden="true">4</span>
+          <div class="node-body">
+            <p class="mono node-step">Step 4 · filed automatically</p>
+            <h3>The contact is added to the CRM as a high-intent lead</h3>
+            <p class="node-copy">Full context attached. Sales sees it the moment it's worth their time.</p>
+          </div>
+          <div class="artifact card">
+            <div class="card-meta"><span><b>CRM</b> · new record</span><span class="hot">high-intent</span></div>
+            <div class="card-pad">
+              <p class="crm-name">Mia Santoso</p>
+              <p class="crm-handle">@mia.styles · via TikTok comment</p>
+            </div>
+            <div class="crm-grid">
+              <div class="crm-cell"><i>Intent</i><b class="hot">● High</b></div>
+              <div class="crm-cell"><i>Stage</i><b>Qualified by AI</b></div>
+              <div class="crm-cell"><i>Source</i><b>TikTok comment</b></div>
+              <div class="crm-cell"><i>Owner</i><b>Sales · Andra</b></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="node reveal">
+          <span class="node-dot" aria-hidden="true">5</span>
+          <div class="node-body">
+            <p class="mono node-step">Step 5 · 19:47:00</p>
+            <h3>The AI places a call with an AI voice</h3>
+            <p class="node-copy">Walks her through the product and books the next step — a real conversation, no human on shift.</p>
+          </div>
+          <div class="artifact card">
+            <div class="card-meta"><span><b>Call</b> · AI voice</span><span>3m 12s</span></div>
+            <div class="card-pad">
+              <div class="transcript">
+                <span><b>AI</b> …and since you mentioned sensitive skin, I'd start with the gentle set.</span>
+                <span class="cust"><b>MIA</b> okay that actually sounds perfect.</span>
+                <span><b>AI</b> Great — I've held one for you and emailed the details.</span>
+              </div>
+              <div class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="node reveal">
+          <span class="node-dot" aria-hidden="true">6</span>
+          <div class="node-body">
+            <p class="mono node-step">Step 6 · nurtured until won</p>
+            <h3>They're enrolled into marketing emails — until they buy</h3>
+            <p class="node-copy">Sign-ups, opens, clicks — tracked on the same customer record as everything above.</p>
+          </div>
+          <div class="artifact card">
+            <div class="card-meta"><span><b>Email</b> · welcome flow 1/5</span><span>sent 19:52</span></div>
+            <div class="card-pad">
+              <p class="email-subject">Mia, your gentle set is waiting 💜</p>
+              <p class="email-body">Everything you asked about — plus 10% off your first order.</p>
+              <span class="email-cta">Complete your order</span>
+            </div>
+            <div class="email-foot"><span class="ok">opened ✓</span><span class="ok">clicked ✓</span><span class="hot">purchased 🛒</span></div>
+          </div>
+        </div>
+      </div>
+
+      <figure class="feeling reveal">
+        <blockquote>A single comment that would normally be missed becomes a <strong>closed customer</strong> — automatically, across every channel, with no one lifting a finger.</blockquote>
+        <figcaption class="mono">The feeling Base360 is built for</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES ============ -->
+  <section id="product">
+    <div class="shell">
+      <p class="mono sec-label reveal">The product — four things, one system</p>
+      <h2 class="reveal">Everything between <em>"someone commented"</em> and <em>"they became a customer."</em></h2>
+      <div class="ledger">
+        <div class="ledger-row reveal">
+          <span class="ledger-num">01</span>
+          <div>
+            <h3>One unified inbox — every comment, DM &amp; channel</h3>
+            <div class="ledger-spec">
+              <span class="spec on">Meta</span><span class="spec on">TikTok</span><span class="spec on">WhatsApp</span><span class="spec on">SMS</span><span class="spec on">Calls</span><span class="spec on">Email</span>
+            </div>
+          </div>
+          <p>Every social comment, DM, message and call in one place. Never miss a comment again — and reply without logging into a single social platform.</p>
+        </div>
+        <div class="ledger-row reveal">
+          <span class="ledger-num">02</span>
+          <div>
+            <h3>AI agents that do the work</h3>
+            <div class="ledger-spec">
+              <span class="spec on">Comment replier</span><span class="spec on">Lead qualifier</span><span class="spec on">AI voice caller</span><span class="spec">+ build your own</span>
+            </div>
+          </div>
+          <p>Build AI agents that handle any task — replying to comments, answering customers, qualifying leads, following up, even calling with an AI voice. Your team stops doing the repetitive work.</p>
+        </div>
+        <div class="ledger-row reveal">
+          <span class="ledger-num">03</span>
+          <div>
+            <h3>A built-in CRM for sales</h3>
+            <div class="ledger-spec">
+              <span class="spec on">Every conversation = a lead</span><span class="spec on">High-intent surfaced</span>
+            </div>
+          </div>
+          <p>High-intent leads are surfaced and handed straight to the sales team, so nothing gets missed and every opportunity gets worked.</p>
+        </div>
+        <div class="ledger-row reveal">
+          <span class="ledger-num">04</span>
+          <div>
+            <h3>Marketing &amp; subscribers</h3>
+            <div class="ledger-spec">
+              <span class="spec on">Capture</span><span class="spec on">Newsletters</span><span class="spec on">Campaigns</span><span class="spec on">Opens &amp; clicks</span>
+            </div>
+          </div>
+          <p>Capture subscribers from your website, design and send newsletters and campaigns, and track it all — tied to the same customer record as every conversation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section id="cta" style="padding-top: 20px;">
+    <div class="shell">
+      <div class="cta-panel reveal">
+        <p class="mono">base360.ai</p>
+        <h2>Stop missing conversations. <em>Start closing them.</em></h2>
+        <a class="btn" href="#top">Get started free</a>
+        <p class="cta-fine">No credit card · Connect Meta, TikTok, WhatsApp &amp; more in minutes</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="shell foot-row">
+    <a class="wordmark" href="#top" style="font-size: 18px;">Base<span>360</span></a>
+    <span class="mono">One system for every conversation.</span>
+    <span class="mono right">© 2026 base360.ai</span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    "use strict";
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* scroll reveal */
+    var els = document.querySelectorAll(".reveal");
+    if ("IntersectionObserver" in window && !reduced) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -30px 0px" });
+      els.forEach(function (el) { io.observe(el); });
+    } else {
+      els.forEach(function (el) { el.classList.add("in"); });
+    }
+
+    /* duplicate ticker content for a seamless loop */
+    var ticker = document.getElementById("ticker");
+    if (ticker && !reduced) ticker.innerHTML += ticker.innerHTML;
+
+    /* wire fill follows scroll through the thread */
+    var thread = document.getElementById("thread");
+    var fill = document.getElementById("wire-fill");
+    if (thread && fill && !reduced) {
+      var onScroll = function () {
+        var rect = thread.getBoundingClientRect();
+        var viewport = window.innerHeight;
+        var progress = (viewport * 0.75 - rect.top) / rect.height;
+        fill.style.height = Math.max(0, Math.min(1, progress)) * 100 + "%";
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    } else if (fill) {
+      fill.style.height = "100%";
+    }
+  })();
+</script>
+
+</html>
