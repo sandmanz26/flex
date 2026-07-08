@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Base360 — CASE FILE No. 360 — STOP LOSING CUSTOMERS IN THE COMMENTS</title>
+<meta name="description" content="Base360, brutalist edition. One system that answers every comment, DM, WhatsApp message, call and email, automatically." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<style>
+/* ==========================================================
+   Base360 — Alt 5: "The Case File" — brutalist design.
+   Fixed single-theme world (a printed hazard bulletin does not
+   have a night mode) — deliberate choice, not an oversight.
+   Palette: black ink on raw paper, one safety-yellow accent,
+   stamp-red used ONLY for urgency marks, never as a UI accent.
+   Type: Anton (headline posters) / Arial-Helvetica (body, plain
+   on purpose) / JetBrains Mono (stamps, case numbers, status).
+   ========================================================== */
+:root {
+  --paper: #f6f6ef; --ink: #0a0a0a; --line: #0a0a0a;
+  --yellow: #ffd400; --red: #e2001a;
+  --disp: "Anton", Impact, "Arial Narrow Bold", sans-serif;
+  --body: Arial, Helvetica, system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+.shell { width: min(1140px, 100% - 40px); margin-inline: auto; }
+a { color: inherit; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.mono { font-family: var(--mono); }
+h1, h2, h3 { font-family: var(--disp); font-weight: 400; text-transform: uppercase; letter-spacing: 0.005em; line-height: 0.98; text-wrap: balance; }
+.mark { background: var(--yellow); padding: 0 6px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity .4s linear, transform .4s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+.btn { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-weight: 700; font-size: 14px; letter-spacing: 0.03em; text-transform: uppercase; padding: 15px 24px; border: 3px solid var(--ink); text-decoration: none; cursor: pointer; transition: background .1s, color .1s; }
+.btn-solid { background: var(--ink); color: var(--paper); }
+.btn-solid:hover { background: var(--yellow); color: var(--ink); }
+.btn-outline { background: transparent; color: var(--ink); }
+.btn-outline:hover { background: var(--ink); color: var(--paper); }
+
+/* ---------- Header ---------- */
+header { border-bottom: 3px solid var(--ink); position: sticky; top: 0; background: var(--paper); z-index: 40; }
+.head-row { display: flex; align-items: center; gap: 20px; padding: 16px 0; }
+.word { font-family: var(--disp); font-size: 24px; letter-spacing: 0.01em; text-decoration: none; text-transform: uppercase; }
+.live { display: flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-left: auto; margin-right: 18px; }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
+@media (prefers-reduced-motion: no-preference) { .live-dot { animation: blink 1.6s steps(2) infinite; } }
+@keyframes blink { 50% { opacity: 0.15; } }
+
+/* ---------- Hero ---------- */
+.hero { padding: 60px 0 0; }
+.stamp { display: inline-block; font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border: 2px solid var(--ink); padding: 6px 14px; margin-bottom: 26px; transform: rotate(-1deg); }
+h1.hero-h { font-size: clamp(40px, 8vw, 92px); margin-bottom: 26px; max-width: 17ch; }
+.hero-sub { font-size: 18px; max-width: 56ch; margin-bottom: 34px; }
+.hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 0; }
+
+/* Hazard ticker */
+.hazard { margin-top: 54px; border-top: 3px solid var(--ink); border-bottom: 3px solid var(--ink); overflow: hidden; background: repeating-linear-gradient(135deg, var(--yellow) 0 22px, var(--ink) 22px 44px); }
+.hazard-inner { background: var(--ink); margin: 8px; overflow: hidden; }
+.hazard-track { display: flex; width: max-content; animation: scroll-x 34s linear infinite; padding: 11px 0; }
+.hazard:hover .hazard-track { animation-play-state: paused; }
+@keyframes scroll-x { to { transform: translateX(-50%); } }
+.hazard-item { font-family: var(--mono); font-size: 12.5px; font-weight: 700; color: var(--yellow); letter-spacing: 0.06em; white-space: nowrap; padding: 0 26px; text-transform: uppercase; }
+
+/* ---------- Sections ---------- */
+section { padding: 70px 0; }
+.sec-tag { display: inline-block; font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 3px solid var(--ink); padding-bottom: 6px; margin-bottom: 22px; }
+h2 { font-size: clamp(30px, 4.6vw, 54px); max-width: 20ch; margin-bottom: 18px; }
+.sec-sub { max-width: 60ch; font-size: 16px; }
+
+/* ---------- Evidence cards ---------- */
+.evidence { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 40px; border: 3px solid var(--ink); }
+.ev-card { position: relative; padding: 28px 24px; border-left: 3px solid var(--ink); }
+.ev-card:first-child { border-left: none; }
+.ev-stamp { position: absolute; top: 16px; right: 16px; font-family: var(--mono); font-size: 10px; font-weight: 800; letter-spacing: 0.05em; color: var(--red); border: 2px solid var(--red); padding: 3px 8px; transform: rotate(6deg); }
+.ev-card h3 { font-size: 21px; text-transform: none; margin-bottom: 10px; max-width: none; letter-spacing: 0; }
+.ev-card p { font-size: 14.5px; }
+
+/* ---------- Exhibit log ---------- */
+.log { margin-top: 40px; border-top: 3px solid var(--ink); }
+.log-row { display: grid; grid-template-columns: 76px 1fr auto; gap: 20px; align-items: center; padding: 22px 0; border-bottom: 3px solid var(--ink); }
+.log-num { font-family: var(--mono); font-weight: 800; font-size: 20px; background: var(--ink); color: var(--yellow); width: 52px; height: 52px; display: grid; place-items: center; }
+.log-body h3 { font-size: 19px; text-transform: none; letter-spacing: 0; margin-bottom: 4px; max-width: none; }
+.log-body p { font-size: 13.5px; }
+.log-status { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border: 2px solid var(--ink); padding: 5px 10px; white-space: nowrap; }
+.log-status.done { background: var(--yellow); }
+
+/* ---------- Mid band ---------- */
+.mid-band { background: var(--ink); color: var(--yellow); padding: 34px 0; }
+.mid-inner { display: flex; align-items: center; justify-content: space-between; gap: 22px; flex-wrap: wrap; }
+.mid-inner h3 { color: var(--yellow); font-size: clamp(20px, 3vw, 30px); max-width: 22ch; letter-spacing: 0; }
+.mid-band .btn-outline { border-color: var(--yellow); color: var(--yellow); }
+.mid-band .btn-outline:hover { background: var(--yellow); color: var(--ink); }
+
+/* ---------- Spec form (features) ---------- */
+.form-table { margin-top: 40px; border: 3px solid var(--ink); }
+.form-head, .form-row { display: grid; grid-template-columns: 60px 1.3fr 1.7fr 1fr; }
+.form-head { background: var(--ink); color: var(--paper); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+.form-row { border-top: 3px solid var(--ink); }
+.f-cell { padding: 16px 18px; border-left: 3px solid var(--ink); }
+.f-cell:first-child { border-left: none; }
+.form-row .f-cell:nth-child(2) { font-family: var(--disp); font-size: 16px; letter-spacing: 0.01em; text-transform: uppercase; }
+.form-row .f-cell:nth-child(3) { font-size: 13.5px; }
+.form-row .f-cell:nth-child(4) { font-family: var(--mono); font-size: 12px; font-weight: 700; }
+.f-num { font-family: var(--mono); font-weight: 800; }
+
+/* ---------- Final CTA ---------- */
+.final { background: var(--ink); padding: 70px 0; }
+.final-inner { border: 3px solid var(--yellow); padding: clamp(30px, 6vw, 60px); }
+.final h2 { color: var(--yellow); max-width: 16ch; letter-spacing: 0; }
+.final p.mono { color: var(--paper); font-size: 13px; margin-top: 18px; max-width: 50ch; }
+.final .btn-solid { background: var(--yellow); color: var(--ink); border-color: var(--yellow); margin-top: 26px; }
+.final .btn-solid:hover { background: var(--paper); }
+
+footer { border-top: 3px solid var(--ink); padding: 26px 0 40px; }
+.foot-row { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: baseline; font-family: var(--mono); font-size: 12px; }
+.foot-row .right { margin-left: auto; }
+
+@media (max-width: 860px) {
+  .evidence { grid-template-columns: 1fr; }
+  .ev-card { border-left: none; border-top: 3px solid var(--ink); }
+  .ev-card:first-child { border-top: none; }
+  .log-row { grid-template-columns: 52px 1fr; }
+  .log-status { grid-column: 2; justify-self: start; }
+  .form-head { display: none; }
+  .form-row { grid-template-columns: 1fr; }
+  .f-cell { border-left: none; border-top: 2px dashed var(--ink); padding: 12px 16px; }
+  .f-cell:first-child { border-top: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .hazard-track { animation: none; }
+  .live-dot { animation: none; opacity: 1; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="shell head-row">
+    <a class="word" href="#top">BASE360</a>
+    <span class="live"><span class="live-dot" aria-hidden="true"></span>LIVE — CASE OPEN</span>
+    <a class="btn btn-solid" href="#cta">Get Started →</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero shell">
+    <p class="stamp reveal">CASE FILE NO. 360 — STATUS: OPEN</p>
+    <h1 class="hero-h reveal">Stop losing customers in the <span class="mark">comments</span>.</h1>
+    <p class="hero-sub reveal">Base360 answers every comment, DM, WhatsApp message, call and email — automatically — and files the good ones as leads. One system. No excuses.</p>
+    <div class="hero-cta reveal">
+      <a class="btn btn-solid" href="#cta">Get Started Free</a>
+      <a class="btn btn-outline" href="#evidence">See The Evidence ↓</a>
+    </div>
+  </div>
+
+  <div class="hazard reveal">
+    <div class="hazard-inner">
+      <div class="hazard-track" id="hazardTrack">
+        <span class="hazard-item">EXHIBIT 01 · UNANSWERED COMMENT</span>
+        <span class="hazard-item">EXHIBIT 02 · MISSED DM</span>
+        <span class="hazard-item">EXHIBIT 03 · LEAD LOST IN 5 INBOXES</span>
+        <span class="hazard-item">EXHIBIT 04 · NO SINGLE VIEW OF CUSTOMER</span>
+        <span class="hazard-item">RESOLUTION: BASE360</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Evidence ============ -->
+  <section id="evidence">
+    <div class="shell">
+      <p class="sec-tag reveal">The Evidence</p>
+      <h2 class="reveal">What we found when we opened the file.</h2>
+      <p class="sec-sub reveal">B2C brands are buried in messages from every direction — comments, DMs, WhatsApp, SMS, calls, email, plus newsletters in yet another tool.</p>
+      <div class="evidence reveal">
+        <div class="ev-card"><span class="ev-stamp">UNRESOLVED</span><h3>Comments go unanswered</h3><p>Every ignored comment is a customer who bought somewhere else — and everyone watching saw the silence.</p></div>
+        <div class="ev-card"><span class="ev-stamp">UNRESOLVED</span><h3>Leads slip through</h3><p>A question in a DM is a lead. Without one system it never reaches sales — it just scrolls away.</p></div>
+        <div class="ev-card"><span class="ev-stamp">UNRESOLVED</span><h3>No single view of the customer</h3><p>Five inboxes, three tools, zero context. Nobody knows who said what, or what happened next.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Exhibit log (hero story) ============ -->
+  <section>
+    <div class="shell">
+      <p class="sec-tag reveal">Exhibit Log</p>
+      <h2 class="reveal">One comment. Six steps. Zero humans.</h2>
+      <div class="log reveal">
+        <div class="log-row"><span class="log-num">01</span><div class="log-body"><h3>Comment lands on TikTok</h3><p>"how much is this?" — the moment most brands miss.</p></div><span class="log-status">19:42:07</span></div>
+        <div class="log-row"><span class="log-num">02</span><div class="log-body"><h3>AI replies publicly, opens a DM</h3><p>Answered in public, then taken private while the intent is hot.</p></div><span class="log-status">+4 SEC</span></div>
+        <div class="log-row"><span class="log-num">03</span><div class="log-body"><h3>AI handles the DM</h3><p>Every question answered in your brand's voice.</p></div><span class="log-status">19:42:16</span></div>
+        <div class="log-row"><span class="log-num">04</span><div class="log-body"><h3>Filed to CRM — high-intent</h3><p>Full context attached. Sales sees it instantly.</p></div><span class="log-status">19:44:58</span></div>
+        <div class="log-row"><span class="log-num">05</span><div class="log-body"><h3>AI voice call</h3><p>Walks the customer through the product.</p></div><span class="log-status">19:47:00</span></div>
+        <div class="log-row"><span class="log-num">06</span><div class="log-body"><h3>Enrolled, nurtured, closed</h3><p>Email flow runs until the sale is made.</p></div><span class="log-status done">RESOLVED</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mid-band reveal">
+    <div class="shell mid-inner">
+      <h3>Read that again. Zero humans involved.</h3>
+      <a class="btn btn-outline" href="#cta">Try It Free</a>
+    </div>
+  </div>
+
+  <!-- ============ System spec (features) ============ -->
+  <section id="system">
+    <div class="shell">
+      <p class="sec-tag reveal">The System</p>
+      <h2 class="reveal">Four modules. One case file.</h2>
+      <div class="form-table reveal">
+        <div class="form-head"><span class="f-cell">NO.</span><span class="f-cell">Module</span><span class="f-cell">Function</span><span class="f-cell">Status</span></div>
+        <div class="form-row">
+          <span class="f-cell f-num">01</span>
+          <span class="f-cell">Unified Inbox</span>
+          <span class="f-cell">Every comment, DM, WhatsApp, SMS, call and email in one place. Never miss one again.</span>
+          <span class="f-cell">ACTIVE</span>
+        </div>
+        <div class="form-row">
+          <span class="f-cell f-num">02</span>
+          <span class="f-cell">AI Agents</span>
+          <span class="f-cell">Build agents for any task — replying, qualifying, following up, calling with an AI voice.</span>
+          <span class="f-cell">ACTIVE</span>
+        </div>
+        <div class="form-row">
+          <span class="f-cell f-num">03</span>
+          <span class="f-cell">Built-In CRM</span>
+          <span class="f-cell">Every conversation becomes a lead. High-intent ones route straight to sales.</span>
+          <span class="f-cell">ACTIVE</span>
+        </div>
+        <div class="form-row">
+          <span class="f-cell f-num">04</span>
+          <span class="f-cell">Marketing</span>
+          <span class="f-cell">Capture subscribers, send campaigns, track opens and clicks — one customer record.</span>
+          <span class="f-cell">ACTIVE</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Final CTA ============ -->
+  <section class="final" id="cta">
+    <div class="shell">
+      <div class="final-inner reveal">
+        <h2>Get started. No credit card.</h2>
+        <p class="mono">Connect Instagram, TikTok, WhatsApp, SMS, calls and email in under 10 minutes. Cancel anytime — but you won't.</p>
+        <a class="btn btn-solid" href="#top">Get Started Free →</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="shell foot-row">
+    <span>BASE360.AI</span>
+    <span>ONE SYSTEM FOR EVERY CONVERSATION.</span>
+    <span class="right">CASE CLOSED — © 2026</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var els = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window && !reduced) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: "0px 0px -20px 0px" });
+    els.forEach(function(el){ io.observe(el); });
+  } else {
+    els.forEach(function(el){ el.classList.add("in"); });
+  }
+  var track = document.getElementById("hazardTrack");
+  if (track && !reduced) track.innerHTML += track.innerHTML;
+})();
+</script>
+</body>
+</html>

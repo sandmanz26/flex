@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Base360 — the thread that never goes unanswered</title>
+<meta name="description" content="Base360's landing page told entirely as a live chat thread: one system for every comment, DM, WhatsApp, SMS, call and email." />
+<style>
+/* ==========================================================
+   Base360 — Alt 4: "The Thread" — chat-native design.
+   The whole page IS a messaging app: a sidebar of channels
+   (proof of "unified inbox") beside one long conversation
+   (proof of the AI + CRM + nurture story). System fonts only —
+   deliberate, because real chat apps use the OS's own type.
+   Palette: cobalt (Base360's voice) + coral (call-to-action),
+   cool paper. Dark theme = the app's native night mode.
+   ========================================================== */
+:root {
+  --paper: #eef2f8; --pane: #ffffff; --ink: #10151f; --muted: #636d82;
+  --line: #dde3ee; --cobalt: #2f5eff; --cobalt-ink: #ffffff;
+  --bubble-in: #e8eaf1; --bubble-in-ink: #1b2130;
+  --coral: #ff4d6d; --coral-ink: #ffffff;
+  --shadow: 0 24px 54px -28px rgba(16, 21, 31, 0.35);
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0b0e16; --pane: #131826; --ink: #eef1f8; --muted: #8892a8;
+    --line: #232a3c; --cobalt: #5b7cff; --cobalt-ink: #0b0e16;
+    --bubble-in: #1e2434; --bubble-in-ink: #e4e7f1;
+    --coral: #ff7288; --coral-ink: #170a0d;
+    --shadow: 0 24px 54px -28px rgba(0, 0, 0, 0.7);
+  }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font-family: var(--sans); line-height: 1.55; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: inherit; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 2px; }
+.mono { font-family: var(--mono); }
+
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity .5s ease, transform .5s cubic-bezier(.2,.7,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
+
+/* ---------- App shell ---------- */
+.app { display: grid; grid-template-columns: 300px 1fr; min-height: 100vh; }
+.rail { border-right: 1px solid var(--line); background: var(--pane); padding: 22px 16px; display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.rail-brand { display: flex; align-items: center; gap: 10px; padding: 6px 8px 18px; font-weight: 800; font-size: 18px; text-decoration: none; color: var(--ink); }
+.rail-mark { width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, var(--cobalt), #7b9dff); flex: none; }
+.rail-label { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 14px 8px 6px; }
+.rail-item { display: flex; align-items: center; gap: 10px; padding: 9px 8px; border-radius: 10px; text-decoration: none; color: var(--ink); }
+.rail-item:hover { background: var(--paper); }
+.rail-item.active { background: color-mix(in srgb, var(--cobalt) 12%, transparent); }
+.rail-ico { width: 30px; height: 30px; border-radius: 9px; flex: none; display: grid; place-items: center; font-size: 13px; color: #fff; font-weight: 700; }
+.rail-body { min-width: 0; flex: 1; }
+.rail-name { font-size: 13.5px; font-weight: 600; display: flex; justify-content: space-between; gap: 8px; }
+.rail-name span.t { font-weight: 400; font-size: 10.5px; color: var(--muted); font-family: var(--mono); }
+.rail-snip { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rail-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--coral); flex: none; }
+.rail-cta { margin-top: auto; padding-top: 16px; }
+
+/* ---------- Main thread ---------- */
+.pane { max-width: 620px; width: 100%; margin-inline: auto; padding: 0 22px 60px; }
+.bar { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--paper) 90%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); padding: 16px 0; display: flex; align-items: center; gap: 12px; }
+.bar-avatar { width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(135deg, var(--cobalt), #7b9dff); color: #fff; display: grid; place-items: center; font-weight: 800; }
+.bar-name { font-weight: 700; font-size: 15px; }
+.bar-status { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.bar-status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #22c55e; }
+.bar-cta { margin-left: auto; flex: none; }
+.bar-cta a { display: inline-block; white-space: nowrap; font-size: 13px; font-weight: 700; text-decoration: none; background: var(--cobalt); color: var(--cobalt-ink); padding: 9px 16px; border-radius: 999px; }
+
+.thread { padding-top: 26px; display: flex; flex-direction: column; gap: 4px; }
+.divider { text-align: center; margin: 22px 0 14px; }
+.divider span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); background: var(--paper); padding: 0 10px; }
+.divider { position: relative; }
+.divider::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--line); z-index: 0; }
+.divider span { position: relative; z-index: 1; }
+
+.row { display: flex; gap: 10px; align-items: flex-end; margin: 3px 0; }
+.row.out { justify-content: flex-end; }
+.av { width: 26px; height: 26px; border-radius: 50%; flex: none; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; }
+.av-cust { background: linear-gradient(135deg, #f472b6, #fb7185); }
+.av-brand { background: linear-gradient(135deg, var(--cobalt), #7b9dff); }
+.bubble { max-width: 74%; padding: 10px 14px; border-radius: 18px; font-size: 14.5px; line-height: 1.48; }
+.row.in .bubble { background: var(--bubble-in); color: var(--bubble-in-ink); border-bottom-left-radius: 5px; }
+.row.out .bubble { background: var(--cobalt); color: var(--cobalt-ink); border-bottom-right-radius: 5px; }
+.meta-chip { font-family: var(--mono); font-size: 10.5px; color: var(--muted); margin: 6px 0 6px 36px; }
+
+/* rich card bubble */
+.card-bubble { max-width: 84%; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--pane); box-shadow: var(--shadow); }
+.row.out .card-bubble { margin-left: 36px; }
+.row.in .card-bubble { margin-right: 36px; }
+.card-head { display: flex; justify-content: space-between; padding: 10px 14px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--line); }
+.card-head b { color: var(--coral); }
+.card-pad { padding: 14px; }
+.card-pad h4 { font-size: 14.5px; margin-bottom: 4px; }
+.card-pad p { font-size: 12.5px; color: var(--muted); }
+.card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); margin-top: 10px; border-top: 1px solid var(--line); }
+.card-grid > div { background: var(--pane); padding: 9px 12px; }
+.card-grid i { display: block; font-style: normal; font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.card-grid b { font-size: 12px; }
+
+.quick-replies { display: flex; gap: 8px; margin: 8px 0 8px 36px; flex-wrap: wrap; }
+.qr { font-size: 13px; font-weight: 600; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--pane); text-decoration: none; color: var(--ink); }
+.qr.primary { background: var(--coral); border-color: var(--coral); color: var(--coral-ink); }
+.qr:hover { transform: translateY(-1px); }
+
+/* feature mini mockups reused inside cards */
+.mini-inbox2 span { display: flex; justify-content: space-between; font-size: 11.5px; padding: 5px 0; border-top: 1px dashed var(--line); }
+.mini-inbox2 span:first-child { border-top: none; }
+.wave2 { display: flex; gap: 3px; align-items: center; height: 20px; margin-top: 6px; }
+.wave2 i { width: 3px; border-radius: 99px; background: var(--cobalt); height: 30%; animation: w2 1s ease-in-out infinite; }
+.wave2 i:nth-child(2n){animation-delay:.12s}.wave2 i:nth-child(3n){animation-delay:.24s}
+@keyframes w2 { 0%,100%{height:20%} 50%{height:95%} }
+.spark2 svg { width: 100%; height: 30px; display: block; margin-top: 6px; }
+
+.typing { display: inline-flex; gap: 4px; padding: 12px 14px; background: var(--bubble-in); border-radius: 18px; border-bottom-left-radius: 5px; }
+.typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); animation: bounce 1.2s infinite ease-in-out; }
+.typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes bounce { 0%,60%,100%{transform:translateY(0);opacity:.5} 30%{transform:translateY(-4px);opacity:1} }
+
+.input-bar { margin-top: 34px; border: 1px solid var(--line); background: var(--pane); border-radius: 999px; padding: 12px 18px; display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 14px; }
+.input-bar .send { margin-left: auto; width: 30px; height: 30px; border-radius: 50%; background: var(--cobalt); color: #fff; display: grid; place-items: center; font-size: 13px; flex: none; }
+
+.foot { max-width: 620px; margin: 40px auto 0; padding: 22px 22px 0; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 12.5px; color: var(--muted); }
+.foot a { text-decoration: none; }
+.foot a:hover { color: var(--ink); }
+
+@media (max-width: 880px) {
+  .app { grid-template-columns: 1fr; }
+  .rail { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--line); flex-direction: row; overflow-x: auto; padding: 14px 16px; }
+  .rail-brand, .rail-label, .rail-cta { display: none; }
+  .rail-item { flex-direction: column; align-items: flex-start; min-width: 132px; }
+  .rail-body { display: none; }
+}
+@media (max-width: 460px) {
+  .bar-status { display: none; }
+  .bar-name { font-size: 14px; }
+  .bar-cta a { padding: 8px 12px; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .wave2 i { animation: none; height: 60%; }
+  .typing i { animation: none; opacity: .8; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ============ SIDEBAR: proof of "unified inbox" ============ -->
+  <aside class="rail" aria-label="Channels">
+    <a class="rail-brand" href="#top"><span class="rail-mark" aria-hidden="true"></span> base360</a>
+    <p class="rail-label">This conversation</p>
+    <a class="rail-item active" href="#thread">
+      <span class="rail-ico" style="background:#111" aria-hidden="true">♪</span>
+      <span class="rail-body"><span class="rail-name">mia.styles <span class="t">now</span></span><span class="rail-snip">yes please!! 🙌</span></span>
+    </a>
+    <p class="rail-label">Every other channel, same inbox</p>
+    <a class="rail-item" href="#thread">
+      <span class="rail-ico" style="background:linear-gradient(135deg,#f58529,#dd2a7b)" aria-hidden="true">◉</span>
+      <span class="rail-body"><span class="rail-name">Daniel R. <span class="t">2m</span></span><span class="rail-snip">Do you ship to Canada?</span></span>
+      <span class="rail-dot"></span>
+    </a>
+    <a class="rail-item" href="#thread">
+      <span class="rail-ico" style="background:#25d366" aria-hidden="true">✆</span>
+      <span class="rail-body"><span class="rail-name">+62 812 ···· <span class="t">6m</span></span><span class="rail-snip">Reorder — same as last time</span></span>
+    </a>
+    <a class="rail-item" href="#thread">
+      <span class="rail-ico" style="background:#6366f1" aria-hidden="true">☎</span>
+      <span class="rail-body"><span class="rail-name">Sofia L. <span class="t">18m</span></span><span class="rail-snip">AI voice call · qualified</span></span>
+    </a>
+    <a class="rail-item" href="#thread">
+      <span class="rail-ico" style="background:#f43f5e" aria-hidden="true">@</span>
+      <span class="rail-body"><span class="rail-name">james@getmail <span class="t">1h</span></span><span class="rail-snip">Following up on the demo…</span></span>
+    </a>
+    <div class="rail-cta">
+      <a class="qr primary" href="#cta" style="display:block;text-align:center">Get started free</a>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN THREAD ============ -->
+  <main class="pane" id="top">
+    <div class="bar">
+      <span class="bar-avatar" aria-hidden="true">b</span>
+      <div><div class="bar-name">Base360</div><div class="bar-status">Active now · replies in seconds</div></div>
+      <span class="bar-cta"><a href="#cta">Get started</a></span>
+    </div>
+
+    <div class="thread" id="thread">
+      <div class="divider"><span>Today, 19:42</span></div>
+
+      <div class="row in reveal">
+        <span class="av av-cust" aria-hidden="true">M</span>
+        <p class="bubble">how much is this? 😍</p>
+      </div>
+      <p class="meta-chip">@mia.styles · TikTok comment · unanswered for 14 min</p>
+
+      <div class="row out reveal">
+        <p class="bubble">Caught it. Replying publicly now — then I'll open a DM while she's still interested.</p>
+        <span class="av av-brand" aria-hidden="true">b</span>
+      </div>
+
+      <div class="row out reveal">
+        <div class="card-bubble">
+          <div class="card-head"><span>Public reply sent</span><b>4s</b></div>
+          <div class="card-pad"><p>"It's $49 with free shipping this week! Just sent you the details 💜"</p></div>
+        </div>
+        <span class="av av-brand" aria-hidden="true">b</span>
+      </div>
+
+      <div class="row in reveal">
+        <span class="av av-cust" aria-hidden="true">M</span>
+        <p class="bubble">is it good for sensitive skin?</p>
+      </div>
+
+      <div class="row out reveal">
+        <p class="bubble">Fragrance-free and dermatologist tested. Want me to hold one for you?</p>
+        <span class="av av-brand" aria-hidden="true">b</span>
+      </div>
+
+      <div class="row in reveal">
+        <span class="av av-cust" aria-hidden="true">M</span>
+        <p class="bubble">yes please!! 🙌</p>
+      </div>
+
+      <div class="row out reveal">
+        <div class="card-bubble">
+          <div class="card-head"><span>Filed to CRM</span><b>High-intent</b></div>
+          <div class="card-pad">
+            <h4>Mia Santoso</h4>
+            <p>@mia.styles · via TikTok comment</p>
+            <div class="card-grid">
+              <div><i>Stage</i><b>Qualified by AI</b></div>
+              <div><i>Owner</i><b>Sales · Andra</b></div>
+            </div>
+          </div>
+        </div>
+        <span class="av av-brand" aria-hidden="true">b</span>
+      </div>
+
+      <div class="row out reveal">
+        <p class="bubble">Should I call her to walk through it?</p>
+        <span class="av av-brand" aria-hidden="true">b</span>
+      </div>
+      <div class="quick-replies reveal" style="justify-content:flex-end;margin-right:36px;margin-left:0">
+        <span class="qr primary">Yes, call her</span><span class="qr">Not yet</span>
+      </div>
+
+      <div class="row in reveal">
+        <div class="card-bubble">
+          <div class="card-head"><span>AI voice call</span><b>3m 12s</b></div>
+          <div class="card-pad">
+            <p>"…and since you mentioned sensitive skin, I'd start with the gentle set."</p>
+            <div class="wave2" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+        </div>
+        <span class="av av-cust" style="visibility:hidden" aria-hidden="true">M</span>
+      </div>
+
+      <div class="row out reveal">
+        <div class="card-bubble">
+          <div class="card-head"><span>Welcome flow · email 1 of 5</span><b>sent</b></div>
+          <div class="card-pad">
+            <h4>Mia, your gentle set is waiting 💜</h4>
+            <p>Opened · clicked · <b style="color:var(--coral)">purchased 🛒</b></p>
+          </div>
+        </div>
+        <span class="av av-brand" aria-hidden="true">b</span>
+      </div>
+
+      <div class="divider reveal"><span>A comment that would've been missed became a customer</span></div>
+
+      <!-- ============ Feature intro as bot monologue ============ -->
+      <div class="row out reveal">
+        <p class="bubble">This is what I do for every comment, on every channel, all day. Four things, really:</p>
+        <span class="av av-brand" aria-hidden="true">b</span>
+      </div>
+
+      <div class="row out reveal">
+        <div class="card-bubble">
+          <div class="card-head"><span>01 · Unified inbox</span></div>
+          <div class="card-pad mini-inbox2">
+            <h4 style="margin-bottom:6px">Every comment, DM &amp; channel — one place</h4>
+            <span><b>TikTok comment</b><i class="mono">2s</i></span>
+            <span><b>Instagram DM</b><i class="mono">8s</i></span>
+            <span><b>WhatsApp</b><i class="mono">12s</i></span>
+            <span><b>Email</b><i class="mono">1m</i></span>
+          </div>
+        </div>
+        <span class="av av-brand" style="visibility:hidden" aria-hidden="true">b</span>
+      </div>
+
+      <div class="row out reveal">
+        <div class="card-bubble">
+          <div class="card-head"><span>02 · AI agents</span></div>
+          <div class="card-pad">
+            <h4 style="margin-bottom:6px">Build agents for any task</h4>
+            <p>Replying, qualifying, following up, even calling with an AI voice — your team stops doing the repetitive work.</p>
+          </div>
+        </div>
+        <span class="av av-brand" style="visibility:hidden" aria-hidden="true">b</span>
+      </div>
+
+      <div class="row out reveal">
+        <div class="card-bubble">
+          <div class="card-head"><span>03 · Built-in CRM</span></div>
+          <div class="card-pad">
+            <h4 style="margin-bottom:6px">Every conversation becomes a lead</h4>
+            <p>High-intent ones route straight to sales, so nothing gets missed and every opportunity gets worked.</p>
+          </div>
+        </div>
+        <span class="av av-brand" style="visibility:hidden" aria-hidden="true">b</span>
+      </div>
+
+      <div class="row out reveal">
+        <div class="card-bubble">
+          <div class="card-head"><span>04 · Marketing &amp; subscribers</span></div>
+          <div class="card-pad spark2">
+            <h4>Capture, send, and track — same customer record</h4>
+            <svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 34 L25 30 L50 31 L75 22 L100 25 L125 14 L150 17 L175 7 L200 3" fill="none" stroke="var(--cobalt)" stroke-width="2.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <span class="av av-brand" style="visibility:hidden" aria-hidden="true">b</span>
+      </div>
+
+      <div class="row out reveal" id="cta">
+        <p class="bubble">Ready to stop losing comments?</p>
+        <span class="av av-brand" aria-hidden="true">b</span>
+      </div>
+      <div class="quick-replies reveal" style="justify-content:flex-end;margin-right:36px;margin-left:0">
+        <a class="qr primary" href="#top">Get started free</a><a class="qr" href="#top">See how it works again</a>
+      </div>
+
+      <div class="input-bar" aria-hidden="true">
+        <span>Message Base360…</span>
+        <span class="send">➤</span>
+      </div>
+    </div>
+
+    <div class="foot">
+      <a href="#top">base360.ai</a>
+      <span>One system for every conversation.</span>
+      <span style="margin-left:auto">© 2026 Base360</span>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var els = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window && !reduced) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.2, rootMargin: "0px 0px -20px 0px" });
+    els.forEach(function(el){ io.observe(el); });
+  } else {
+    els.forEach(function(el){ el.classList.add("in"); });
+  }
+})();
+</script>
+</body>
+</html>

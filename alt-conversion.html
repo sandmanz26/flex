@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Base360 — Every comment answered before it becomes a lost sale.</title>
+<meta name="description" content="Base360: reply to every comment, DM, WhatsApp, SMS, call and email automatically, and turn the good ones into tracked leads. Conversion-focused landing page." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+/* ==========================================================
+   Base360 — Alt 3: "Proof Desk" — conversion-first design.
+   Palette: teal (growth/trust) + coral (urgency), mint paper.
+   Type: Archivo Expanded (display) / Plex Sans (body) / Plex Mono (data).
+   Layout: strict left-aligned grid, proof stats above the fold,
+   before/after ledger, repeated CTAs, spec-table features.
+   ========================================================== */
+:root {
+  --paper: #f4f8f6; --paper-2: #ffffff; --ink: #0b201b; --muted: #4c6058;
+  --line: #d7e3de; --teal: #0f8b6c; --teal-deep: #0a6b53; --teal-soft: #e2f3ee;
+  --coral: #ff5630; --coral-soft: #ffe6e0;
+  --shadow: 0 20px 44px -26px rgba(11, 32, 27, 0.28);
+  --disp: "Archivo Expanded", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0a1512; --paper-2: #101f1a; --ink: #eaf3ef; --muted: #93a89f;
+    --line: #1c332b; --teal: #2fd6a8; --teal-deep: #1fae87; --teal-soft: #133027;
+    --coral: #ff8266; --coral-soft: #2c1712;
+    --shadow: 0 20px 44px -26px rgba(0, 0, 0, 0.6);
+  }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+.shell { width: min(1100px, 100% - 44px); margin-inline: auto; }
+a { color: inherit; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
+h1, h2, h3 { font-family: var(--disp); font-weight: 800; letter-spacing: -0.01em; text-wrap: balance; line-height: 1.08; }
+.mono { font-family: var(--mono); }
+.tnum { font-variant-numeric: tabular-nums; }
+
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
+
+.btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--body); font-weight: 700; font-size: 15px; padding: 14px 24px; border-radius: 8px; text-decoration: none; cursor: pointer; transition: transform .15s, box-shadow .15s, background .15s; border: 1.5px solid transparent; }
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--teal); color: #fff; box-shadow: 0 10px 22px -10px rgba(15,139,108,0.55); }
+.btn-primary:hover { background: var(--teal-deep); transform: translateY(-2px); }
+.btn-ghost { color: var(--ink); border-color: var(--line); background: var(--paper-2); }
+.btn-ghost:hover { border-color: var(--teal); color: var(--teal-deep); }
+.btn-light { background: #fff; color: var(--teal-deep); }
+.btn-light:hover { transform: translateY(-2px); }
+
+/* ---------- Header ---------- */
+header { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.head-row { display: flex; align-items: center; gap: 30px; height: 66px; }
+.word { font-family: var(--disp); font-weight: 800; font-size: 20px; text-decoration: none; letter-spacing: -0.01em; }
+.word b { color: var(--teal); }
+.head-links { display: flex; gap: 24px; margin-inline: auto; }
+.head-links a { text-decoration: none; font-size: 14.5px; font-weight: 500; color: var(--muted); }
+.head-links a:hover { color: var(--ink); }
+
+/* ---------- Hero ---------- */
+.hero { padding: 66px 0 0; }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal-deep); background: var(--teal-soft); border: 1px solid color-mix(in srgb, var(--teal) 30%, var(--line)); border-radius: 999px; padding: 6px 13px; margin-bottom: 24px; }
+.eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--teal); }
+h1.hero-h { font-size: clamp(36px, 5.4vw, 60px); max-width: 16ch; margin-bottom: 22px; }
+.hero-sub { max-width: 60ch; font-size: 17.5px; color: var(--muted); margin-bottom: 32px; }
+.hero-sub b { color: var(--ink); font-weight: 600; }
+.hero-cta { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; margin-bottom: 46px; }
+.hero-cta .textlink { font-weight: 600; font-size: 14.5px; text-decoration: none; border-bottom: 1.5px solid var(--line); padding-bottom: 3px; }
+.hero-cta .textlink:hover { border-color: var(--teal); color: var(--teal-deep); }
+
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.stat { padding: 22px 20px; border-right: 1px solid var(--line); }
+.stat:last-child { border-right: none; }
+.stat b { display: block; font-family: var(--disp); font-size: clamp(24px, 2.6vw, 32px); font-weight: 800; color: var(--teal-deep); }
+.stat span { font-size: 12.5px; color: var(--muted); }
+
+.trust-band { padding: 22px 0; border-bottom: 1px solid var(--line); }
+.trust-inner { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.trust-label { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.trust-chip { font-family: var(--mono); font-size: 12.5px; font-weight: 500; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; color: var(--ink); background: var(--paper-2); }
+
+/* ---------- Sections ---------- */
+section { padding: 84px 0; }
+.sec-eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal-deep); margin-bottom: 14px; }
+h2 { font-size: clamp(28px, 3.6vw, 42px); max-width: 20ch; margin-bottom: 16px; }
+.sec-sub { max-width: 60ch; color: var(--muted); font-size: 16px; }
+
+/* ---------- Before / after ledger ---------- */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 46px; }
+.compare-col { border: 1.5px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--paper-2); }
+.compare-head { padding: 16px 20px; font-family: var(--disp); font-weight: 800; font-size: 15px; letter-spacing: -0.01em; }
+.compare-col.bad .compare-head { background: var(--coral-soft); color: var(--coral); }
+.compare-col.good .compare-head { background: var(--teal-soft); color: var(--teal-deep); }
+.compare-list { list-style: none; }
+.compare-list li { display: flex; gap: 12px; align-items: flex-start; padding: 14px 20px; border-top: 1px solid var(--line); font-size: 14.5px; }
+.compare-list li b.mark { font-family: var(--mono); flex: none; width: 18px; }
+.compare-col.bad .mark { color: var(--coral); }
+.compare-col.good .mark { color: var(--teal); }
+
+/* ---------- Receipt (hero story, condensed) ---------- */
+.receipt-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; margin-top: 46px; }
+.receipt { background: var(--paper-2); border: 1.5px solid var(--line); border-radius: 4px; box-shadow: var(--shadow); font-family: var(--mono); overflow: hidden; }
+.receipt-top { padding: 18px 22px 14px; border-bottom: 1.5px dashed var(--line); text-align: center; }
+.receipt-top b { display: block; font-family: var(--disp); font-size: 15px; letter-spacing: 0.02em; }
+.receipt-top span { font-size: 11px; color: var(--muted); }
+.receipt-line { display: flex; justify-content: space-between; gap: 14px; padding: 12px 22px; border-bottom: 1px dashed var(--line); font-size: 12.5px; }
+.receipt-line .num { color: var(--teal-deep); font-weight: 600; flex: none; width: 20px; }
+.receipt-line .desc { flex: 1; color: var(--ink); }
+.receipt-line .t { color: var(--muted); flex: none; }
+.receipt-total { display: flex; justify-content: space-between; padding: 16px 22px; font-weight: 600; font-size: 13px; background: var(--teal-soft); color: var(--teal-deep); }
+
+.receipt-copy h3 { font-size: clamp(22px, 2.8vw, 30px); margin-bottom: 16px; max-width: 14ch; }
+.receipt-copy p { color: var(--muted); font-size: 15.5px; margin-bottom: 26px; max-width: 46ch; }
+
+/* ---------- mid CTA ---------- */
+.mid-cta { background: var(--ink); color: var(--paper); border-radius: 16px; padding: 30px 34px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.mid-cta p { font-family: var(--disp); font-weight: 800; font-size: clamp(18px, 2.4vw, 24px); max-width: 26ch; }
+.mid-cta .btn-primary { background: var(--teal); }
+
+/* ---------- Feature spec table ---------- */
+.spec-table { margin-top: 44px; border: 1.5px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--paper-2); }
+.spec-row { display: grid; grid-template-columns: 1.1fr 1.6fr 1fr; border-top: 1px solid var(--line); }
+.spec-row:first-child { border-top: none; }
+.spec-head { display: grid; grid-template-columns: 1.1fr 1.6fr 1fr; background: var(--teal-soft); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal-deep); }
+.spec-cell { padding: 18px 22px; }
+.spec-row .spec-cell:first-child { font-family: var(--disp); font-weight: 700; font-size: 15.5px; }
+.spec-row .spec-cell:nth-child(2) { color: var(--muted); font-size: 14px; }
+.spec-row .spec-cell:last-child { font-family: var(--mono); font-size: 12.5px; color: var(--teal-deep); font-weight: 600; }
+
+/* ---------- Proof quote ---------- */
+.proof { display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: center; background: var(--paper-2); border: 1.5px solid var(--line); border-radius: 16px; padding: 34px; margin-top: 46px; }
+.proof-avatar { width: 56px; height: 56px; border-radius: 14px; background: linear-gradient(135deg, var(--teal), var(--teal-deep)); color: #fff; font-family: var(--disp); font-size: 22px; display: grid; place-items: center; flex: none; }
+.stars { color: var(--teal); letter-spacing: 3px; font-size: 14px; margin-bottom: 8px; }
+.proof blockquote { font-family: var(--disp); font-weight: 600; font-size: 19px; line-height: 1.4; margin-bottom: 10px; }
+.proof cite { font-style: normal; font-size: 13px; color: var(--muted); }
+
+/* ---------- Final CTA ---------- */
+.final-cta { background: linear-gradient(155deg, var(--teal-deep), var(--teal)); color: #fff; border-radius: 20px; padding: clamp(44px, 7vw, 76px); text-align: left; }
+.final-cta h2 { color: #fff; max-width: 18ch; }
+.final-cta p { color: color-mix(in srgb, #fff 82%, transparent); font-size: 16.5px; max-width: 50ch; margin: 16px 0 30px; }
+.final-list { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 26px; font-family: var(--mono); font-size: 12.5px; color: color-mix(in srgb, #fff 85%, transparent); }
+
+footer { border-top: 1px solid var(--line); padding: 30px 0 44px; }
+.foot-row { display: flex; flex-wrap: wrap; gap: 10px 26px; align-items: baseline; font-size: 13.5px; color: var(--muted); }
+.foot-row .right { margin-left: auto; }
+
+@media (max-width: 860px) {
+  .head-links { display: none; }
+  .stat-row { grid-template-columns: 1fr 1fr; }
+  .stat:nth-child(2) { border-right: none; }
+  .compare, .receipt-wrap { grid-template-columns: 1fr; gap: 30px; }
+  .spec-row, .spec-head { grid-template-columns: 1fr; }
+  .spec-head { display: none; }
+  .spec-row .spec-cell { border-top: 1px dashed var(--line); }
+  .spec-row .spec-cell:first-child { border-top: none; }
+  .proof { grid-template-columns: 1fr; text-align: left; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="shell head-row">
+    <a class="word" href="#top">base<b>360</b></a>
+    <nav class="head-links" aria-label="Primary">
+      <a href="#proof">Proof</a>
+      <a href="#how">How it works</a>
+      <a href="#product">Product</a>
+    </nav>
+    <a class="btn btn-primary" href="#cta">Start free</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero shell">
+    <p class="eyebrow reveal">Built for B2C reply volume</p>
+    <h1 class="hero-h reveal">Every comment answered before the customer scrolls away.</h1>
+    <p class="hero-sub reveal">Base360 catches every Instagram and TikTok comment, DM, WhatsApp, SMS, call and email, replies with <b>AI agents</b>, and files the good ones as <b>tracked leads</b> — automatically.</p>
+    <div class="hero-cta reveal">
+      <a class="btn btn-primary" href="#cta">Start free — 2 min setup</a>
+      <a class="textlink" href="#how">Watch it answer a comment ↓</a>
+    </div>
+  </div>
+
+  <div class="shell">
+    <div class="stat-row reveal">
+      <div class="stat"><b class="tnum">0</b><span>missed comments</span></div>
+      <div class="stat"><b class="tnum">12s</b><span>median first reply</span></div>
+      <div class="stat"><b class="tnum">38</b><span>leads routed today</span></div>
+      <div class="stat"><b class="tnum">6</b><span>channels, one system</span></div>
+    </div>
+  </div>
+
+  <div class="trust-band">
+    <div class="shell trust-inner reveal">
+      <span class="trust-label">Plugs into what you already run on</span>
+      <span class="trust-chip">Instagram</span><span class="trust-chip">TikTok</span><span class="trust-chip">WhatsApp</span><span class="trust-chip">SMS</span><span class="trust-chip">Calls</span><span class="trust-chip">Email</span>
+    </div>
+  </div>
+
+  <!-- ============ Before / after ============ -->
+  <section id="proof">
+    <div class="shell">
+      <p class="sec-eyebrow reveal">The cost of not replying</p>
+      <h2 class="reveal">What changes the moment Base360 is on.</h2>
+      <p class="sec-sub reveal">B2C brands are buried in messages from every direction — comments, DMs, WhatsApp, SMS, calls, email, plus newsletters in yet another tool. Here's the difference on day one.</p>
+      <div class="compare">
+        <div class="compare-col bad reveal">
+          <p class="compare-head">Without Base360</p>
+          <ul class="compare-list">
+            <li><b class="mark">✕</b>Comments sit unanswered for hours</li>
+            <li><b class="mark">✕</b>DMs, WhatsApp and email live in five different apps</li>
+            <li><b class="mark">✕</b>Hot leads get buried under routine questions</li>
+            <li><b class="mark">✕</b>No one knows what happened after the first reply</li>
+          </ul>
+        </div>
+        <div class="compare-col good reveal" style="transition-delay:.08s">
+          <p class="compare-head">With Base360</p>
+          <ul class="compare-list">
+            <li><b class="mark">✓</b>Every comment gets a reply within seconds</li>
+            <li><b class="mark">✓</b>One inbox for every channel, every teammate</li>
+            <li><b class="mark">✓</b>High-intent conversations flagged and routed to sales</li>
+            <li><b class="mark">✓</b>Full history — comment to close — on one record</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Receipt / how it works ============ -->
+  <section id="how">
+    <div class="shell receipt-wrap">
+      <div class="receipt-copy reveal">
+        <p class="sec-eyebrow">Exhibit — one comment, in full</p>
+        <h3>How one "how much is this?" becomes a customer.</h3>
+        <p>This is the actual sequence Base360 runs — no one on your team touches it. Every step below happens automatically, in order, the moment a comment lands.</p>
+        <a class="btn btn-ghost" href="#cta">See your own comments answered →</a>
+      </div>
+      <div class="receipt reveal" style="transition-delay:.1s">
+        <div class="receipt-top"><b>BASE360 — ACTIVITY RECEIPT</b><span>Thread #A417 · TikTok → CRM → Email</span></div>
+        <div class="receipt-line"><span class="num">01</span><span class="desc">Comment received — "how much is this?"</span><span class="t">19:42:07</span></div>
+        <div class="receipt-line"><span class="num">02</span><span class="desc">AI replies publicly, opens DM</span><span class="t">+4s</span></div>
+        <div class="receipt-line"><span class="num">03</span><span class="desc">AI answers questions in DM</span><span class="t">19:42:16</span></div>
+        <div class="receipt-line"><span class="num">04</span><span class="desc">Filed to CRM — High-intent lead</span><span class="t">19:44:58</span></div>
+        <div class="receipt-line"><span class="num">05</span><span class="desc">AI voice call — product walkthrough</span><span class="t">19:47:00</span></div>
+        <div class="receipt-line"><span class="num">06</span><span class="desc">Enrolled in email nurture flow</span><span class="t">19:52:36</span></div>
+        <div class="receipt-total"><span>Manual replies required</span><span class="tnum">0</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="shell">
+    <div class="mid-cta reveal">
+      <p>Read that again — zero humans involved, one customer closed.</p>
+      <a class="btn btn-primary" href="#cta">Try it free</a>
+    </div>
+  </div>
+
+  <!-- ============ Feature spec table ============ -->
+  <section id="product">
+    <div class="shell">
+      <p class="sec-eyebrow reveal">Four things that move the number</p>
+      <h2 class="reveal">What's actually inside one system.</h2>
+      <div class="spec-table reveal">
+        <div class="spec-head"><span class="spec-cell">Capability</span><span class="spec-cell">What it does</span><span class="spec-cell">Proof</span></div>
+        <div class="spec-row">
+          <span class="spec-cell">Unified inbox</span>
+          <span class="spec-cell">Every comment, DM, WhatsApp, SMS, call and email in one place — reply without opening a single social app.</span>
+          <span class="spec-cell tnum">0 missed / day</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-cell">AI agents</span>
+          <span class="spec-cell">Build agents for any task — replying, qualifying, following up, even calling with an AI voice.</span>
+          <span class="spec-cell">3 agents live in 10 min</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-cell">Built-in CRM</span>
+          <span class="spec-cell">Every conversation becomes a lead. High-intent ones route straight to sales — nothing gets missed.</span>
+          <span class="spec-cell tnum">38 routed today</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-cell">Marketing &amp; subscribers</span>
+          <span class="spec-cell">Capture sign-ups, send newsletters and campaigns, track opens and clicks — same customer record.</span>
+          <span class="spec-cell">+38% growth / mo</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Proof quote ============ -->
+  <section>
+    <div class="shell">
+      <div class="proof reveal">
+        <span class="proof-avatar" aria-hidden="true">R</span>
+        <div>
+          <p class="stars" aria-label="5 out of 5 stars">★★★★★</p>
+          <blockquote>"We stopped losing sales in the comments section. The AI catches things our team physically couldn't."</blockquote>
+          <cite>— Ops lead, DTC skincare brand · live on Base360 since Feb</cite>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Final CTA ============ -->
+  <section id="cta">
+    <div class="shell">
+      <div class="final-cta reveal">
+        <h2>Start replying to every comment today.</h2>
+        <p>Connect Instagram, TikTok, WhatsApp and email in minutes. Let the AI take the first shift while your team watches it work.</p>
+        <a class="btn btn-light" href="#top">Start free — 2 min setup</a>
+        <div class="final-list">
+          <span>✓ No credit card</span>
+          <span>✓ Live in under 10 minutes</span>
+          <span>✓ Cancel anytime</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="shell foot-row">
+    <a class="word" href="#top" style="font-size:16px;">base<b>360</b>.ai</a>
+    <span>One system for every conversation.</span>
+    <span class="right">© 2026 Base360</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var els = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window && !reduced) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: "0px 0px -30px 0px" });
+    els.forEach(function(el){ io.observe(el); });
+  } else {
+    els.forEach(function(el){ el.classList.add("in"); });
+  }
+})();
+</script>
+</body>
+</html>
