@@ -22,104 +22,13 @@
   } else {
     revealEls.forEach(function (el) { el.classList.add("in"); });
   }
-
-  /* ---------- Hero story stepper ---------- */
-  var STEP_MS = 3400;
-  var steps = Array.prototype.slice.call(document.querySelectorAll(".step"));
-  var screens = Array.prototype.slice.call(document.querySelectorAll(".screen"));
-  var caption = document.getElementById("phone-caption");
-  var storySection = document.getElementById("how");
-  if (!steps.length || !screens.length) return;
-
-  var captions = [
-    "A comment lands on your TikTok post — the moment most brands miss.",
-    "The AI agent answers publicly in seconds, then opens a DM.",
-    "The AI handles the whole conversation in your brand's voice.",
-    "Mia is now a high-intent lead in the CRM — with full context.",
-    "An AI voice call walks her through the product.",
-    "Enrolled, nurtured — and converted. No one lifted a finger."
-  ];
-
-  document.documentElement.style.setProperty("--step-ms", STEP_MS + "ms");
-
-  var current = 0;
-  var timer = null;
-  var running = false;
-
-  function show(index) {
-    current = index;
-    steps.forEach(function (step, i) {
-      step.classList.toggle("active", i === index);
-      step.classList.toggle("done", i < index);
-      if (i === index) {
-        // restart the progress bar animation
-        var bar = step.querySelector(".step-bar span");
-        if (bar) {
-          bar.style.animation = "none";
-          void bar.offsetWidth;
-          bar.style.animation = "";
-        }
-      }
-    });
-    screens.forEach(function (screen, i) {
-      screen.classList.toggle("on", i === index);
-    });
-    if (caption) caption.textContent = captions[index] || "";
-  }
-
-  function next() { show((current + 1) % steps.length); }
-
-  function start() {
-    if (running || reducedMotion) return;
-    running = true;
-    timer = setInterval(next, STEP_MS);
-  }
-
-  function stop() {
-    running = false;
-    if (timer) { clearInterval(timer); timer = null; }
-  }
-
-  steps.forEach(function (step, i) {
-    step.addEventListener("click", function () {
-      show(i);
-      stop();
-      start(); // reset the cadence from the clicked step
-    });
-  });
-
-  // Only auto-play while the story section is on screen
-  show(0);
-  if ("IntersectionObserver" in window) {
-    var storyIO = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) start();
-          else stop();
-        });
-      },
-      { threshold: 0.25 }
-    );
-    if (storySection) storyIO.observe(storySection);
-  } else {
-    start();
-  }
-
-  // Pause while the user is reading / hovering the steps
-  var stepsList = document.getElementById("steps");
-  if (stepsList) {
-    stepsList.addEventListener("mouseenter", stop);
-    stepsList.addEventListener("mouseleave", start);
-  }
 })();
 
 /* ------------------------------------------------------------
-   Scroll-paced alternative to the hero story (id="how-scroll").
-   No timer: the sticky phone's screen is driven entirely by
-   which .fstep is nearest the center of the viewport as the
-   visitor scrolls, so reading speed sets the pace, not a clock.
-   Fully independent of the autoplay logic above — separate class
-   names, separate ids, nothing shared but the .reveal fade-in.
+   How-it-works story (id="how"). No timer: the sticky phone's
+   screen is driven entirely by which .fstep is nearest the
+   center of the viewport as the visitor scrolls, so reading
+   speed sets the pace, not a clock.
    ------------------------------------------------------------ */
 (function () {
   "use strict";
@@ -245,10 +154,19 @@
       row.className = "urow";
       if (color) row.style.setProperty("--c", color);
       row.innerHTML =
+        '<span class="urow-new">new</span>' +
         '<span class="urow-dot"></span>' +
         '<span class="urow-body"><b>' + data.label + '</b><span>' + data.text + '</span></span>' +
         '<span class="urow-status typing">typing<span class="urow-typedots"><i></i><i></i><i></i></span></span>';
-      rows.appendChild(row);
+      rows.prepend(row);
+      rows.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+
+      var newBadge = row.querySelector(".urow-new");
+      setTimeout(function () {
+        if (!newBadge) return;
+        newBadge.classList.add("fade");
+        setTimeout(function () { newBadge.remove(); }, reduced ? 0 : 400);
+      }, reduced ? 0 : 2400);
 
       var replySec = 4 + Math.floor(Math.random() * 10);
       var typeDelay = reduced ? 0 : 850;
@@ -264,7 +182,7 @@
           var avg = Math.round(times.reduce(function (a, b) { return a + b; }, 0) / times.length);
           avgEl.textContent = avg + "s";
         }
-        while (rows.children.length > 6) rows.removeChild(rows.firstChild);
+        while (rows.children.length > 6) rows.removeChild(rows.lastChild);
       }, typeDelay);
     }, appearDelay);
   }
