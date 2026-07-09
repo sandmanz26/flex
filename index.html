@@ -105,6 +105,42 @@
       </div>
     </section>
 
+    <!-- ============ NEW: "See it unify" — multi-channel + auto-reply demo ============ -->
+    <section class="unify" id="unify">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Still one inbox — now watch it happen live</p>
+          <h2>Every channel lands here.<br />Every one gets answered.</h2>
+          <p class="sub">Click a channel below to fire off a real customer message from it. Watch it land in one inbox and get an AI reply — no matter where it came from.</p>
+        </div>
+
+        <div class="unify-stage" id="unifyStage">
+          <div class="unify-sources" role="group" aria-label="Simulate an incoming message from a channel">
+            <button class="src-btn" type="button" data-src="ig" style="--c:#dd2a7b">Instagram</button>
+            <button class="src-btn" type="button" data-src="tt" style="--c:#111111">TikTok</button>
+            <button class="src-btn" type="button" data-src="wa" style="--c:#25d366">WhatsApp</button>
+            <button class="src-btn" type="button" data-src="sms" style="--c:#38bdf8">SMS</button>
+            <button class="src-btn" type="button" data-src="call" style="--c:#6366f1">Call</button>
+            <button class="src-btn" type="button" data-src="mail" style="--c:#f43f5e">Email</button>
+          </div>
+
+          <div class="unify-inbox" id="unifyInbox">
+            <div class="unify-inbox-head"><span>UNIFIED INBOX — ALL CHANNELS</span><span class="unify-live-dot" aria-hidden="true"></span></div>
+            <div class="unify-rows" id="unifyRows">
+              <p class="unify-empty" id="unifyEmpty">Click a channel above — the message will land here and get answered automatically.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="unify-stats reveal">
+          <div><b id="unifyCount">0</b><span>Answered here</span></div>
+          <div><b id="unifyAvg">—</b><span>Avg reply time</span></div>
+          <div><b>6</b><span>Channels, 1 inbox</span></div>
+        </div>
+        <p class="unify-hint reveal">This keeps running on its own too — try clicking a couple of channels back to back.</p>
+      </div>
+    </section>
+
     <!-- ============ PROBLEM ============ -->
     <section class="problem" id="problem">
       <div class="container">
@@ -483,6 +519,41 @@
             </div>
           </article>
         </div>
+      </div>
+    </section>
+
+    <!-- ============ NEW: "Human vs AI" race comparison ============ -->
+    <section class="race" id="race">
+      <div class="container">
+        <div class="section-head section-head-dark reveal">
+          <p class="kicker kicker-dark">What actually happens at your volume</p>
+          <h2>Same 10 messages. <em>Two very different afternoons.</em></h2>
+          <p class="sub">This runs on its own once you scroll here — the same burst of comments hitting a human-only team versus Base360, side by side.</p>
+        </div>
+        <div style="text-align: center;">
+          <a class="btn btn-outline-light" href="#race" id="raceReplay">↻ Replay the comparison</a>
+        </div>
+
+        <div class="race-grid reveal">
+          <div class="race-col">
+            <div class="race-head"><h3>A human team</h3><span class="race-tag bad">Answering manually</span></div>
+            <div class="race-queue" id="raceHuman" aria-live="polite"></div>
+            <div class="race-foot"><span>Under 1 min: <b id="humanFast">0</b>/10</span><span>Still waiting: <b id="humanStuck">0</b></span></div>
+          </div>
+          <div class="race-col">
+            <div class="race-head"><h3>Base360</h3><span class="race-tag good">AI agents, every channel</span></div>
+            <div class="race-queue" id="raceAI" aria-live="polite"></div>
+            <div class="race-foot"><span>Under 1 min: <b id="aiFast">0</b>/10</span><span>Still waiting: <b id="aiStuck">0</b></span></div>
+          </div>
+        </div>
+
+        <div class="race-score" id="raceScore">
+          <div><b>~5m</b><span>avg human reply time*</span></div>
+          <div class="hl"><b>~8s</b><span>avg Base360 reply time</span></div>
+          <div><b>4</b><span>comments never answered (human)</span></div>
+          <div class="hl"><b>0</b><span>comments never answered (Base360)</span></div>
+        </div>
+        <p class="race-fine reveal">*Among the ones that did get a reply — the other four never did.</p>
       </div>
     </section>
 
