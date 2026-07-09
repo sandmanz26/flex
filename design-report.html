@@ -137,9 +137,9 @@ footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center;
     <h1>What was built, and why it's built that way.</h1>
     <p class="lede">This is a working record of the UX reasoning behind the Base360 landing page variants — not a style guide, a log of decisions: what problem each one solves, what was tried, and what changed after review.</p>
     <div class="meta-row">
-      <span><b>7</b> page variants</span>
+      <span><b>8</b> page variants</span>
       <span><b>2</b> new proof sections</span>
-      <span><b>3</b> rounds of review-driven revision</span>
+      <span><b>4</b> rounds of review-driven revision</span>
       <span><b>6</b> competitors researched</span>
     </div>
   </div>
@@ -167,7 +167,7 @@ footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center;
       <li>Every addition was verified in a real browser (Playwright) against both the new content <em>and</em> the sections around it, specifically checking that nothing upstream or downstream had changed.</li>
       <li>The client always keeps a full set of options on disk and can say "remove this one" later — nothing was designed to be a dead end.</li>
     </ul>
-    <p>The payoff: seven pages now exist side by side, each a legitimate answer to "what should base360.ai look like," and the client can compare them directly instead of trusting a single opinion.</p>
+    <p>The payoff: eight pages now exist side by side, each a legitimate answer to "what should base360.ai look like," and the client can compare them directly instead of trusting a single opinion.</p>
   </section>
 
   <section id="principles">
@@ -177,7 +177,7 @@ footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center;
     <div class="principle">
       <h3>User-controlled pacing over autoplay <span class="tag">reading experience</span></h3>
       <p>The first hero story auto-advanced every 4.2 seconds. It looked good, but it forced everyone to read at the same speed — too slow for a skim, too fast for someone actually reading the detail line.</p>
-      <p class="applied"><b>Applied in:</b> <code>index.html#how-scroll</code> replaces the timer entirely with an <code>IntersectionObserver</code> keyed to scroll position — the phone mockup only advances when the reader's own scroll crosses into the next step. Nobody can get ahead of it or fall behind it, because it has no clock. The original autoplay version was kept, unmodified, as <code>#how</code> for comparison.</p>
+      <p class="applied"><b>Applied in:</b> <code>index.html#how</code> replaces the timer entirely with an <code>IntersectionObserver</code> keyed to scroll position — the phone mockup only advances when the reader's own scroll crosses into the next step. Nobody can get ahead of it or fall behind it, because it has no clock. This was originally shipped as a second, parallel section (<code>#how-scroll</code>) sitting next to the autoplay original for side-by-side comparison; after review confirmed the scroll-paced version was the one to keep, the autoplay original was removed outright and this section was promoted to the page's sole <code>#how</code>.</p>
     </div>
 
     <div class="principle">
@@ -213,7 +213,7 @@ footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center;
 
   <section id="changelog">
     <h2><span class="h2-num">03</span>Review → change log</h2>
-    <p class="section-sub">A specific example of the "add, don't replace" workflow in practice — three pieces of direct feedback on <code>index.html</code>, and exactly what changed in response.</p>
+    <p class="section-sub">A specific example of the "add, don't replace" workflow in practice — direct feedback on <code>index.html</code> across four rounds, and exactly what changed in response.</p>
 
     <div class="change-log">
       <p class="change-title">1 · The "answered here" stats felt like decoration, not proof</p>
@@ -256,6 +256,21 @@ footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center;
           <span class="tag2">After</span>
           <p>The panel is visible from the moment the section loads, showing <span class="mono">—</span> placeholders, then computing real running averages from each reply as it resolves — with a short highlight pulse on every update.</p>
           <p class="why">Why: a summary you might miss isn't a summary. Making it live removed the "did I miss it?" risk and turned a static reveal into another piece of visible proof.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="change-log">
+      <p class="change-title">4 · The client picked a winner between the two "how it works" tellings, and the live demo needed to feel more alive</p>
+      <div class="change-row">
+        <div class="change-cell before">
+          <span class="tag2">Before</span>
+          <p>The page opened on a static gradient hero (headline + inbox mockup), then told the 6-step story twice back to back — once as autoplay (<span class="mono">#how</span>), once scroll-paced (<span class="mono">#how-scroll</span>) — before ever reaching the interactive <span class="mono">#unify</span> demo. Clicking a channel in that demo appended a new row at the bottom of a reversed list, with no visual cue that anything new had just arrived.</p>
+        </div>
+        <div class="change-cell after">
+          <span class="tag2">After</span>
+          <p>The static gradient hero was removed outright; the live <span class="mono">#unify</span> demo is now the hero itself, with its own headline and a "Get started free / See what's inside" CTA pair. The autoplay <span class="mono">#how</span> was removed; the scroll-paced version was renamed to <span class="mono">#how</span> and now stands alone. Clicking a channel in the promoted demo now prepends the new message to the top of the list, animates the list scrolling up to meet it, and tags it with a brief <span class="mono">new</span> badge that fades out — so the newest activity is always the thing the reader's eye lands on first.</p>
+          <p class="why">Why: once a clear winner exists between two parallel options, keeping both stops being a comparison and starts being duplicate content a real visitor has to read through twice. Promoting the strongest, most evidential section (a real, clickable demo) to the hero — instead of a static mockup — puts the proof first instead of making people scroll to earn it.</p>
         </div>
       </div>
     </div>
@@ -323,22 +338,23 @@ footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center;
     <p class="section-sub">A focused audit of the current state of the first variant, split the way the client asked: how it reads, and how it converts. Findings are tagged by severity, not by how easy they'd be to fix.</p>
 
     <div class="audit-score">
-      <div><b>9</b><span>content sections, single scroll</span></div>
-      <div><b>2</b><span>duplicate "how it works" tellings</span></div>
+      <div><b>8</b><span>content sections, single scroll</span></div>
+      <div><b>1</b><span>"how it works" telling (was 2)</span></div>
       <div><b>1</b><span>CTA type on the whole page</span></div>
       <div><b>0</b><span>objection-handling (FAQ) present</span></div>
     </div>
+    <p class="src-note">Updated after round 4: the duplicate "how it works" telling was resolved directly on <code>index.html</code> (see change log, entry 4). The remaining two CRO gaps below — no lower-commitment action, no FAQ — are still true of <code>index.html</code> itself; they were addressed by building <code>alt-cro.html</code> as a sibling page rather than by editing this page in place, per the "add, don't replace" rule.</p>
 
     <h3 style="font-size:17px;margin-bottom:6px;">Reading experience</h3>
 
     <div class="finding sev-low">
       <h4>The section rhythm is genuinely consistent <span class="sev">Working well</span></h4>
-      <p>Every section follows the same kicker → heading → sub-paragraph pattern, and light/dark backgrounds alternate roughly every one to two sections (hero → problem light, <code>#how</code>/<code>#how-scroll</code> dark, <code>#unify</code>/features light, <code>#race</code>/CTA dark). That alternation works like chapter breaks in a long document — it gives the eye a place to reset without any extra UI, and it's the reason the page doesn't feel like one undifferentiated wall of content despite its length.</p>
+      <p>Every section follows the same kicker → heading → sub-paragraph pattern, and light/dark backgrounds alternate roughly every one to two sections (<code>#unify</code> hero light, <code>#problem</code> light, <code>#how</code> dark, features light, <code>#race</code>/CTA dark). That alternation works like chapter breaks in a long document — it gives the eye a place to reset without any extra UI, and it's the reason the page doesn't feel like one undifferentiated wall of content despite its length.</p>
     </div>
 
-    <div class="finding sev-high">
-      <h4>The page tells the same 6-step story twice, back to back <span class="sev">High</span></h4>
-      <p><code>#how</code> (autoplay) and <code>#how-scroll</code> (scroll-driven) sit directly next to each other and narrate the identical TikTok-comment-to-customer sequence with near-identical copy. That duplication exists on purpose right now — it's an internal A/B comparison for this review, not a shipped decision — but for an actual first-time visitor reading top to bottom, hitting the same story twice in a row reads as repetitive and is a plausible drop-off point ("didn't I just read this?"). This is the single most consequential open item on the page: before this goes live, one version needs to be chosen and the other either removed or demoted to a secondary/optional view.</p>
+    <div class="finding sev-low">
+      <h4>The page used to tell the same 6-step story twice, back to back <span class="sev">Resolved</span></h4>
+      <p><code>#how</code> (autoplay) and <code>#how-scroll</code> (scroll-driven) used to sit directly next to each other, narrating the identical TikTok-comment-to-customer sequence with near-identical copy — flagged here as the single most consequential open item on the page. After review, the client confirmed the scroll-paced telling was the one to keep: the autoplay version was removed, and the scroll-paced section was renamed to the page's sole <code>#how</code>. A first-time visitor now reads the story exactly once.</p>
     </div>
 
     <div class="finding sev-med">
@@ -349,27 +365,27 @@ footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center;
 
     <div class="finding sev-low">
       <h4>Channel icons are still single characters standing in for logos <span class="sev">Carried over, unresolved</span></h4>
-      <p>This was flagged in the very first review pass of this project and was never separately fixed: <code>.ch-icon</code> renders channel marks as Unicode glyphs (♪ for TikTok, ✆ for WhatsApp, ☎ for calls, @ for email) rather than real icons. Low severity on its own, but it's the kind of detail that erodes trust exactly in the sections built to establish trust (the channel row under the hero, the <code>#unify</code> source buttons).</p>
+      <p>This was flagged in the very first review pass of this project and was never separately fixed: <code>.ch-icon</code> renders channel marks as Unicode glyphs (♪ for TikTok, ✆ for WhatsApp, ☎ for calls, @ for email) rather than real icons. Low severity on its own, but it's the kind of detail that erodes trust exactly in the sections built to establish trust — the feature-card mini-inbox and the <code>#unify</code> source buttons, which is now the very first thing a visitor sees since <code>#unify</code> was promoted to the hero.</p>
     </div>
 
     <h3 style="font-size:17px;margin:28px 0 6px;">CRO (conversion) experience</h3>
 
     <div class="finding sev-high">
-      <h4>Every visitor gets exactly one action, regardless of readiness <span class="sev">High</span></h4>
-      <p>The only conversion path on the entire page is "Get started free," repeated in the nav, hero and final CTA. There is no lower-commitment alternative — no email capture, no "book a demo," no newsletter/waitlist — for a visitor who's convinced but not ready to create an account cold. <code>alt-tryit.html</code> solved exactly this with "Email me a 2-min tour instead"; <code>index.html</code> has no equivalent, so every not-quite-ready visitor simply leaves with nothing captured.</p>
-      <p class="fix"><b>Fix:</b> add one lower-commitment action — even a simple email-capture block reusing the pattern already built for <code>alt-tryit.html</code> — near the final CTA.</p>
+      <h4>Every visitor gets exactly one action, regardless of readiness <span class="sev">High — open on index.html</span></h4>
+      <p>The only conversion path on <code>index.html</code> is "Get started free," repeated in the nav, hero and final CTA. There is no lower-commitment alternative — no email capture, no "book a demo," no newsletter/waitlist — for a visitor who's convinced but not ready to create an account cold. <code>alt-tryit.html</code> solved exactly this with "Email me a 2-min tour instead," and this round's new <code>alt-cro.html</code> duplicates <code>index.html</code>'s structure specifically to add a proper email-capture block near the final CTA. <code>index.html</code> itself, however, was left untouched per "add, don't replace" — this finding is resolved in the sibling page, not fixed in place.</p>
+      <p class="fix"><b>Fix, if this is ever wanted on <code>index.html</code> directly:</b> port the <code>.capture</code> block from <code>alt-cro.html</code> near the final CTA.</p>
     </div>
 
     <div class="finding sev-high">
-      <h4>No objection-handling anywhere on the page <span class="sev">High</span></h4>
-      <p><code>alt-tryit.html</code> and <code>alt-walkthrough.html</code> both carry an FAQ accordion answering the questions a skeptical visitor is actually holding ("does this replace my team," "what if the AI gets something wrong," "is there really a free plan"). <code>index.html</code> has none — a visitor can scroll the entire page, watch both story formats, play with the live demo and the race, and still reach the final CTA with an unanswered doubt.</p>
-      <p class="fix"><b>Fix:</b> port the FAQ block from <code>alt-tryit.html</code> as a new section before the final CTA — it's already written and already accessible (<code>aria-expanded</code> accordion).</p>
+      <h4>No objection-handling anywhere on the page <span class="sev">High — open on index.html</span></h4>
+      <p><code>alt-tryit.html</code> and <code>alt-walkthrough.html</code> both carry an FAQ accordion answering the questions a skeptical visitor is actually holding ("does this replace my team," "what if the AI gets something wrong," "is there really a free plan"). <code>index.html</code> still has none — a visitor can scroll the entire page, read the how-it-works story, play with the live demo and the race, and still reach the final CTA with an unanswered doubt. <code>alt-cro.html</code> now carries a 5-item FAQ answering exactly these objections, but again as a separate page, not an in-place edit.</p>
+      <p class="fix"><b>Fix, if this is ever wanted on <code>index.html</code> directly:</b> port the <code>#faq</code> section from <code>alt-cro.html</code> — it's already written and accessible (<code>aria-expanded</code> accordion).</p>
     </div>
 
     <div class="finding sev-med">
-      <h4>The interactive proof sections are a double-edged sword for a ready-to-buy visitor <span class="sev">Medium</span></h4>
-      <p><code>#unify</code> and <code>#race</code> are strong trust-builders for someone who needs convincing, but they're also pure engagement — every second spent clicking channel buttons or watching a ~6.5s race animation is a second not spent moving toward the CTA. For a bottom-funnel visitor who already knows they want in, a long, playful page without a persistent CTA is friction, not proof.</p>
-      <p class="fix"><b>Fix:</b> add a sticky/dismissible CTA bar (the pattern already exists in <code>alt-tryit.html</code>) so an already-convinced visitor never has to scroll back up to act, no matter how deep into the demos they are.</p>
+      <h4>The interactive proof sections are a double-edged sword for a ready-to-buy visitor <span class="sev">Medium — open on index.html</span></h4>
+      <p><code>#unify</code> and <code>#race</code> are strong trust-builders for someone who needs convincing, but they're also pure engagement — every second spent clicking channel buttons or watching a ~6.5s race animation is a second not spent moving toward the CTA. For a bottom-funnel visitor who already knows they want in, a long, playful page without a persistent CTA is friction, not proof. <code>alt-cro.html</code> now ships a sticky, dismissible CTA bar that appears once the reader scrolls past the hero, so this specific problem is solved on that page.</p>
+      <p class="fix"><b>Fix, if this is ever wanted on <code>index.html</code> directly:</b> port the <code>.sticky-cta</code> bar and its IntersectionObserver-driven show/dismiss logic from <code>alt-cro.html</code>.</p>
     </div>
 
     <div class="finding sev-low">
@@ -380,17 +396,18 @@ footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center;
 
   <section id="pages">
     <h2><span class="h2-num">06</span>All pages, for reference</h2>
-    <p class="section-sub">Seven independent variants, all on branch <code>claude/frontend-design-task-tgzrkj</code>.</p>
+    <p class="section-sub">Eight independent variants, all on branch <code>claude/frontend-design-task-tgzrkj</code>.</p>
     <table class="spec">
       <thead><tr><th>File</th><th>Thesis</th></tr></thead>
       <tbody>
-        <tr><td class="mono">index.html</td><td>SaaS gradient hero + live unify demo + human-vs-AI race</td></tr>
+        <tr><td class="mono">index.html</td><td>Live unify demo as hero + scroll-paced how-it-works + human-vs-AI race</td></tr>
         <tr><td class="mono">alternative.html</td><td>Editorial "switchboard ledger" — serif, scroll-linked wire</td></tr>
         <tr><td class="mono">alt-conversion.html</td><td>"Proof Desk" — conversion-first, stats above the fold</td></tr>
         <tr><td class="mono">alt-chat.html</td><td>"The Thread" — the whole page is a native chat UI</td></tr>
         <tr><td class="mono">alt-brutalist.html</td><td>"The Case File" — raw hazard-poster brutalism</td></tr>
         <tr><td class="mono">alt-tryit.html</td><td>"Try It Now" — self-serve, instant interactive demo</td></tr>
         <tr><td class="mono">alt-walkthrough.html</td><td>"The Walkthrough" — considered-purchase, ROI calculator</td></tr>
+        <tr><td class="mono">alt-cro.html</td><td>"The Closer" — index.html's structure, rewritten for conversion: sharper copy, FAQ, email capture, sticky CTA</td></tr>
       </tbody>
     </table>
   </section>
