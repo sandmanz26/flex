@@ -24,7 +24,7 @@
   }
 
   /* ---------- Hero story stepper ---------- */
-  var STEP_MS = 4200;
+  var STEP_MS = 3400;
   var steps = Array.prototype.slice.call(document.querySelectorAll(".step"));
   var screens = Array.prototype.slice.call(document.querySelectorAll(".screen"));
   var caption = document.getElementById("phone-caption");
@@ -314,10 +314,25 @@
   var humanStuckEl = document.getElementById("humanStuck");
   var aiFastEl = document.getElementById("aiFast");
   var aiStuckEl = document.getElementById("aiStuck");
-  var scoreEl = document.getElementById("raceScore");
+  var scoreHumanAvgEl = document.getElementById("scoreHumanAvg");
+  var scoreAiAvgEl = document.getElementById("scoreAiAvg");
+  var scoreHumanStuckEl = document.getElementById("scoreHumanStuck");
+  var scoreAiStuckEl = document.getElementById("scoreAiStuck");
   var replayBtn = document.getElementById("raceReplay");
   var section = document.getElementById("race");
   if (!humanCol || !aiCol) return;
+
+  function flashBump(el) {
+    var box = el && el.parentElement;
+    if (!box) return;
+    box.classList.remove("bump");
+    void box.offsetWidth;
+    box.classList.add("bump");
+  }
+  function formatMinSec(totalSec) {
+    var mm = Math.floor(totalSec / 60), ss = totalSec % 60;
+    return mm > 0 ? (mm + "m " + (ss < 10 ? "0" : "") + ss + "s") : (ss + "s");
+  }
 
   var MSGS = [
     { c: "#dd2a7b", text: "Do you ship to Canada?", ai: 6, human: { label: "0m 55s" } },
@@ -351,12 +366,27 @@
     clearTimers();
     humanCol.innerHTML = "";
     aiCol.innerHTML = "";
-    scoreEl.classList.remove("show");
     var humanFast = 0, humanStuck = 0, aiFast = 0;
+    var humanTimes = [], aiTimes = [];
     humanFastEl.textContent = "0"; humanStuckEl.textContent = "0"; aiFastEl.textContent = "0";
+    scoreHumanAvgEl.textContent = "—"; scoreAiAvgEl.textContent = "—";
+    scoreHumanStuckEl.textContent = "0"; scoreAiStuckEl.textContent = "0";
+
+    function updateHumanAvg() {
+      if (!humanTimes.length) return;
+      var avgSec = Math.round(humanTimes.reduce(function (a, b) { return a + b; }, 0) / humanTimes.length);
+      scoreHumanAvgEl.textContent = formatMinSec(avgSec);
+      flashBump(scoreHumanAvgEl);
+    }
+    function updateAiAvg() {
+      if (!aiTimes.length) return;
+      var avg = Math.round(aiTimes.reduce(function (a, b) { return a + b; }, 0) / aiTimes.length);
+      scoreAiAvgEl.textContent = avg + "s";
+      flashBump(scoreAiAvgEl);
+    }
 
     MSGS.forEach(function (m, i) {
-      var arrival = instant ? 0 : i * 480;
+      var arrival = instant ? 0 : i * 380;
 
       timers.push(setTimeout(function () {
         var row = addRow(aiCol, m.text, m.c, "Replying…", "waiting");
@@ -366,7 +396,9 @@
           st.textContent = "Replied · " + m.ai + "s";
           aiFast++;
           aiFastEl.textContent = String(aiFast);
-        }, instant ? 0 : 500));
+          aiTimes.push(m.ai);
+          updateAiAvg();
+        }, instant ? 0 : 450));
       }, arrival));
 
       timers.push(setTimeout(function () {
@@ -378,24 +410,25 @@
             st.textContent = "Still waiting";
             humanStuck++;
             humanStuckEl.textContent = String(humanStuck);
-          }, instant ? 0 : 900));
+            scoreHumanStuckEl.textContent = String(humanStuck);
+            flashBump(scoreHumanStuckEl);
+          }, instant ? 0 : 800));
         } else {
           timers.push(setTimeout(function () {
             var st = row.querySelector(".rrow-status");
             st.className = "rrow-status done";
             st.textContent = "Replied · " + m.human.label;
-            if (humanLabelSeconds(m.human.label) < 60) {
+            var secs = humanLabelSeconds(m.human.label);
+            if (secs < 60) {
               humanFast++;
               humanFastEl.textContent = String(humanFast);
             }
-          }, instant ? 0 : 900 + i * 260));
+            humanTimes.push(secs);
+            updateHumanAvg();
+          }, instant ? 0 : 800 + i * 210));
         }
       }, arrival));
     });
-
-    timers.push(setTimeout(function () {
-      scoreEl.classList.add("show");
-    }, instant ? 0 : MSGS.length * 480 + 1600));
   }
 
   if (replayBtn) replayBtn.addEventListener("click", function (e) { e.preventDefault(); run(reduced); });

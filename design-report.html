@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Base360 — Design &amp; UX Report</title>
+<meta name="description" content="A working record of the UX principles applied while designing the Base360 landing page variants: what was built, why, and what changed based on review." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --paper: #fbfaff; --card: #ffffff; --ink: #191735; --ink-soft: #4b4869; --muted: #7b7897;
+  --line: #e8e6f6; --primary: #5b50e3; --primary-deep: #4338ca; --primary-soft: #eeecfd;
+  --good: #16a34a; --good-soft: #e7f7ec; --bad: #dc2626; --bad-soft: #fde8e8;
+  --shadow: 0 18px 44px -26px rgba(38, 27, 120, 0.22);
+  --disp: "Sora", system-ui, sans-serif; --body: "Inter", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #121022; --card: #1a1830; --ink: #ece9fb; --ink-soft: #b6b2d8; --muted: #8f8ab5;
+    --line: #2c2a4a; --primary: #8b83ec; --primary-deep: #a89bff; --primary-soft: #241f45;
+    --good: #4ade80; --good-soft: #123321; --bad: #ff8f7c; --bad-soft: #3a1616;
+    --shadow: 0 18px 44px -26px rgba(0, 0, 0, 0.6);
+  }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+.wrap { width: min(880px, 100% - 44px); margin-inline: auto; }
+a { color: var(--primary-deep); }
+h1, h2, h3 { font-family: var(--disp); font-weight: 800; letter-spacing: -0.015em; text-wrap: balance; }
+.mono { font-family: var(--mono); }
+code { font-family: var(--mono); font-size: 0.9em; background: var(--primary-soft); color: var(--primary-deep); padding: 1px 6px; border-radius: 5px; }
+
+header.top { border-bottom: 1px solid var(--line); padding: 46px 0 40px; }
+.kicker { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary-deep); margin-bottom: 14px; }
+h1 { font-size: clamp(30px, 4.2vw, 44px); margin-bottom: 16px; max-width: 20ch; }
+.lede { font-size: 17px; color: var(--ink-soft); max-width: 62ch; }
+.meta-row { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 22px; font-size: 13px; color: var(--muted); }
+.meta-row b { color: var(--ink); }
+
+nav.toc { display: flex; gap: 8px; flex-wrap: wrap; padding: 20px 0; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(8px); z-index: 10; }
+nav.toc a { font-size: 13px; font-weight: 600; text-decoration: none; color: var(--ink-soft); border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; }
+nav.toc a:hover { border-color: var(--primary); color: var(--primary-deep); }
+
+main { padding: 50px 0 90px; }
+section { padding-top: 56px; scroll-margin-top: 90px; }
+section:first-of-type { padding-top: 0; }
+h2 { font-size: clamp(22px, 2.8vw, 28px); margin-bottom: 8px; }
+.h2-num { font-family: var(--mono); color: var(--primary); font-weight: 700; margin-right: 10px; }
+.section-sub { color: var(--muted); font-size: 15px; max-width: 60ch; margin-bottom: 26px; }
+p { margin-bottom: 14px; max-width: 68ch; }
+ul, ol { margin: 0 0 14px 22px; max-width: 64ch; }
+li { margin-bottom: 6px; }
+
+.principle {
+  background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+  padding: 22px 24px; margin: 20px 0; box-shadow: var(--shadow);
+}
+.principle h3 { font-size: 16.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+.principle h3 .tag { font-family: var(--mono); font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; background: var(--primary-soft); color: var(--primary-deep); padding: 3px 9px; border-radius: 999px; }
+.principle p:last-child { margin-bottom: 0; }
+.principle .applied { font-size: 13.5px; color: var(--muted); border-top: 1px dashed var(--line); margin-top: 12px; padding-top: 12px; }
+.principle .applied b { color: var(--ink); font-weight: 600; }
+
+.change-log { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--card); margin-top: 22px; }
+.change-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid var(--line); }
+.change-row:first-child { border-top: none; }
+.change-cell { padding: 18px 22px; }
+.change-cell.before { border-right: 1px solid var(--line); }
+.change-cell .tag2 { display: inline-block; font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; margin-bottom: 10px; }
+.change-cell.before .tag2 { background: var(--bad-soft); color: var(--bad); }
+.change-cell.after .tag2 { background: var(--good-soft); color: var(--good); }
+.change-row h4 { display: none; }
+.change-title { grid-column: 1 / -1; padding: 16px 22px 0; font-family: var(--disp); font-weight: 700; font-size: 15px; }
+.change-cell p { font-size: 14px; margin-bottom: 0; }
+.change-cell .why { font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+
+table.spec { width: 100%; border-collapse: collapse; margin-top: 18px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+table.spec th, table.spec td { text-align: left; padding: 12px 16px; font-size: 13.5px; border-bottom: 1px solid var(--line); }
+table.spec th { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: var(--paper); }
+table.spec tr:last-child td { border-bottom: none; }
+table.spec td.mono { color: var(--primary-deep); }
+
+.links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+.link-card { display: block; text-decoration: none; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+.link-card:hover { border-color: var(--primary); }
+.link-card b { display: block; color: var(--ink); font-size: 14.5px; margin-bottom: 3px; }
+.link-card span { display: block; color: var(--muted); font-size: 12.5px; }
+
+footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center; color: var(--muted); font-size: 13px; }
+
+@media (max-width: 720px) {
+  .change-row { grid-template-columns: 1fr; }
+  .change-cell.before { border-right: none; border-bottom: 1px solid var(--line); }
+  .links-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <p class="kicker">Design &amp; UX report — base360.ai landing page</p>
+    <h1>What was built, and why it's built that way.</h1>
+    <p class="lede">This is a working record of the UX reasoning behind the Base360 landing page variants — not a style guide, a log of decisions: what problem each one solves, what was tried, and what changed after review.</p>
+    <div class="meta-row">
+      <span><b>7</b> page variants</span>
+      <span><b>2</b> new proof sections</span>
+      <span><b>3</b> rounds of review-driven revision</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="wrap" style="display:flex; gap:8px; flex-wrap:wrap;">
+    <a href="#approach">Approach</a>
+    <a href="#principles">Principles applied</a>
+    <a href="#changelog">Review → change log</a>
+    <a href="#pages">All pages</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <section id="approach">
+    <h2><span class="h2-num">01</span>The approach</h2>
+    <p class="section-sub">Every round in this project followed the same rule, stated by the client early on and kept for the rest of the work: <b>add, don't replace.</b></p>
+    <p>Rather than converging on one "final" landing page, each request produced a new, independent variant — different visual language, different information architecture, sometimes a different buyer journey entirely — while anything already shipped stayed exactly as it was. Concretely, that meant:</p>
+    <ul>
+      <li>New sections use their own CSS class prefixes and element ids, so a new stylesheet block or script IIFE can never leak into, override, or race against an existing one.</li>
+      <li>Every addition was verified in a real browser (Playwright) against both the new content <em>and</em> the sections around it, specifically checking that nothing upstream or downstream had changed.</li>
+      <li>The client always keeps a full set of options on disk and can say "remove this one" later — nothing was designed to be a dead end.</li>
+    </ul>
+    <p>The payoff: seven pages now exist side by side, each a legitimate answer to "what should base360.ai look like," and the client can compare them directly instead of trusting a single opinion.</p>
+  </section>
+
+  <section id="principles">
+    <h2><span class="h2-num">02</span>Principles applied</h2>
+    <p class="section-sub">Six patterns show up repeatedly across the variants. Each one exists because a specific problem showed up during review.</p>
+
+    <div class="principle">
+      <h3>User-controlled pacing over autoplay <span class="tag">reading experience</span></h3>
+      <p>The first hero story auto-advanced every 4.2 seconds. It looked good, but it forced everyone to read at the same speed — too slow for a skim, too fast for someone actually reading the detail line.</p>
+      <p class="applied"><b>Applied in:</b> <code>index.html#how-scroll</code> replaces the timer entirely with an <code>IntersectionObserver</code> keyed to scroll position — the phone mockup only advances when the reader's own scroll crosses into the next step. Nobody can get ahead of it or fall behind it, because it has no clock. The original autoplay version was kept, unmodified, as <code>#how</code> for comparison.</p>
+    </div>
+
+    <div class="principle">
+      <h3>Show, don't tell <span class="tag">conversion</span></h3>
+      <p>A static "AI replied · 4s" badge is a claim. Letting someone click a channel and watch a message actually get answered is evidence. The gap between those two is most of what separates a landing page people skim from one they trust.</p>
+      <p class="applied"><b>Applied in:</b> the <code>#unify</code> section (multi-channel demo) and the hero live-demo in <code>alt-tryit.html</code> — both are real DOM state machines (typing indicator → reply → "filed to CRM"), not looping videos or CSS-only animation. <code>aria-live="polite"</code> regions mean the same evidence reaches screen reader users, not just sighted ones.</p>
+    </div>
+
+    <div class="principle">
+      <h3>Quantified contrast beats a features list <span class="tag">conversion</span></h3>
+      <p>"AI agents, every channel" is a feature. "10 messages in, and the human column still has 4 that were never answered" is a consequence. The second one is what actually gets remembered.</p>
+      <p class="applied"><b>Applied in:</b> the <code>#race</code> section — a human-team-vs-Base360 simulation run on identical input, ending in a scoreboard (avg reply time, comments never answered). It's deliberately not framed as 100% AI vs 0% human effort; the copy is honest that it's comparing against "duct-taped tools," which is the actual competitor.</p>
+    </div>
+
+    <div class="principle">
+      <h3>Different buyers need different pages, not different paragraphs <span class="tag">information architecture</span></h3>
+      <p>A visitor ready to sign up today and a visitor who needs to loop in three teammates before deciding are not served by the same page with an extra FAQ bullet. They need different primary actions.</p>
+      <p class="applied"><b>Applied in:</b> <code>alt-tryit.html</code> ("Try It Now") leads with a single low-friction CTA and an instant demo. <code>alt-walkthrough.html</code> instead offers three calibrated actions — book a walkthrough, start free, or copy a link to send a teammate — plus a live ROI calculator, because that reader's blocker isn't curiosity, it's needing to justify the decision internally.</p>
+    </div>
+
+    <div class="principle">
+      <h3>Numbers you can act on, not just numbers you can read <span class="tag">wow / trust</span></h3>
+      <p>A number that never changes reads as decoration. A number that visibly responds to what you just did reads as proof the system is real.</p>
+      <p class="applied"><b>Applied in:</b> the ROI calculator in <code>alt-walkthrough.html</code> recomputes live from a slider input. The <code>#race</code> scoreboard in <code>index.html</code> was reworked (see the change log below) from a single reveal-at-the-end panel into four stats that count up in real time as each simulated reply resolves.</p>
+    </div>
+
+    <div class="principle">
+      <h3>Motion is a tool, not a default <span class="tag">accessibility</span></h3>
+      <p>Every animated section — the demo flights, the race, both story formats — has an explicit <code>prefers-reduced-motion</code> path that renders the finished end-state instantly instead of skipping the content or leaving it half-built.</p>
+      <p class="applied"><b>Applied throughout:</b> interactive controls use real semantics (<code>aria-expanded</code> on the FAQ accordions, <code>aria-pressed</code> on toggles, <code>aria-live</code> on regions that update on their own), and every custom control is keyboard-operable, not just clickable.</p>
+    </div>
+  </section>
+
+  <section id="changelog">
+    <h2><span class="h2-num">03</span>Review → change log</h2>
+    <p class="section-sub">A specific example of the "add, don't replace" workflow in practice — three pieces of direct feedback on <code>index.html</code>, and exactly what changed in response.</p>
+
+    <div class="change-log">
+      <p class="change-title">1 · The "answered here" stats felt like decoration, not proof</p>
+      <div class="change-row">
+        <div class="change-cell before">
+          <span class="tag2">Before</span>
+          <p>Three bare numbers — <span class="mono">18 / 9s / 6</span> — with labels but no baseline. Correct information, but nothing to measure it against.</p>
+        </div>
+        <div class="change-cell after">
+          <span class="tag2">After</span>
+          <p>Each stat now carries a comparison line: <span class="mono">vs. 0 replied manually</span>, <span class="mono">vs. ~4 hrs typical first reply</span>, <span class="mono">vs. 6 separate logins</span>.</p>
+          <p class="why">Why: a number only means something in contrast to an alternative. Pairing each stat with what "without Base360" looks like turns three facts into an argument.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="change-log">
+      <p class="change-title">2 · The autoplay step list was hard to read mid-transition</p>
+      <div class="change-row">
+        <div class="change-cell before">
+          <span class="tag2">Before</span>
+          <p>Steps switched every 4.2s. The detail line under the active step used <span class="mono">display: none → block</span> — an instant, layout-shifting pop that competed with the reader's eye.</p>
+        </div>
+        <div class="change-cell after">
+          <span class="tag2">After</span>
+          <p>Interval shortened to <span class="mono">3.4s</span>; the detail line now animates in on <span class="mono">opacity + max-height</span> over 0.32s with a slight delay, so it eases in instead of jumping.</p>
+          <p class="why">Why: the request wasn't "slow it down," it was "stop interrupting me." A faster cycle with a softer transition reads calmer than a slower one with a hard cut.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="change-log">
+      <p class="change-title">3 · The race scoreboard only appeared after the full animation finished</p>
+      <div class="change-row">
+        <div class="change-cell before">
+          <span class="tag2">Before</span>
+          <p>Four summary stats (avg reply time, comments never answered) were hardcoded strings, hidden until a <span class="mono">setTimeout</span> fired at the very end of a ~6.5s sequence.</p>
+        </div>
+        <div class="change-cell after">
+          <span class="tag2">After</span>
+          <p>The panel is visible from the moment the section loads, showing <span class="mono">—</span> placeholders, then computing real running averages from each reply as it resolves — with a short highlight pulse on every update.</p>
+          <p class="why">Why: a summary you might miss isn't a summary. Making it live removed the "did I miss it?" risk and turned a static reveal into another piece of visible proof.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pages">
+    <h2><span class="h2-num">04</span>All pages, for reference</h2>
+    <p class="section-sub">Seven independent variants, all on branch <code>claude/frontend-design-task-tgzrkj</code>.</p>
+    <table class="spec">
+      <thead><tr><th>File</th><th>Thesis</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">index.html</td><td>SaaS gradient hero + live unify demo + human-vs-AI race</td></tr>
+        <tr><td class="mono">alternative.html</td><td>Editorial "switchboard ledger" — serif, scroll-linked wire</td></tr>
+        <tr><td class="mono">alt-conversion.html</td><td>"Proof Desk" — conversion-first, stats above the fold</td></tr>
+        <tr><td class="mono">alt-chat.html</td><td>"The Thread" — the whole page is a native chat UI</td></tr>
+        <tr><td class="mono">alt-brutalist.html</td><td>"The Case File" — raw hazard-poster brutalism</td></tr>
+        <tr><td class="mono">alt-tryit.html</td><td>"Try It Now" — self-serve, instant interactive demo</td></tr>
+        <tr><td class="mono">alt-walkthrough.html</td><td>"The Walkthrough" — considered-purchase, ROI calculator</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">Base360 design record · generated for internal review · 2026</div>
+</footer>
+
+</body>
+</html>

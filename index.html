@@ -133,9 +133,9 @@
         </div>
 
         <div class="unify-stats reveal">
-          <div><b id="unifyCount">0</b><span>Answered here</span></div>
-          <div><b id="unifyAvg">—</b><span>Avg reply time</span></div>
-          <div><b>6</b><span>Channels, 1 inbox</span></div>
+          <div><b id="unifyCount">0</b><span>Answered here</span><i class="unify-vs">vs. 0 replied manually in this time</i></div>
+          <div><b id="unifyAvg">—</b><span>Avg reply time</span><i class="unify-vs">vs. ~4 hrs typical first reply</i></div>
+          <div><b>6</b><span>Channels, 1 inbox</span><i class="unify-vs">vs. 6 separate logins to check</i></div>
         </div>
         <p class="unify-hint reveal">This keeps running on its own too — try clicking a couple of channels back to back.</p>
       </div>
@@ -547,11 +547,11 @@
           </div>
         </div>
 
-        <div class="race-score" id="raceScore">
-          <div><b>~5m</b><span>avg human reply time*</span></div>
-          <div class="hl"><b>~8s</b><span>avg Base360 reply time</span></div>
-          <div><b>4</b><span>comments never answered (human)</span></div>
-          <div class="hl"><b>0</b><span>comments never answered (Base360)</span></div>
+        <div class="race-score reveal" id="raceScore">
+          <div><b id="scoreHumanAvg">—</b><span>avg human reply time*</span></div>
+          <div class="hl"><b id="scoreAiAvg">—</b><span>avg Base360 reply time</span></div>
+          <div><b id="scoreHumanStuck">0</b><span>comments never answered (human)</span></div>
+          <div class="hl"><b id="scoreAiStuck">0</b><span>comments never answered (Base360)</span></div>
         </div>
         <p class="race-fine reveal">*Among the ones that did get a reply — the other four never did.</p>
       </div>
