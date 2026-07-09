@@ -112,3 +112,60 @@
     stepsList.addEventListener("mouseleave", start);
   }
 })();
+
+/* ------------------------------------------------------------
+   Scroll-paced alternative to the hero story (id="how-scroll").
+   No timer: the sticky phone's screen is driven entirely by
+   which .fstep is nearest the center of the viewport as the
+   visitor scrolls, so reading speed sets the pace, not a clock.
+   Fully independent of the autoplay logic above — separate class
+   names, separate ids, nothing shared but the .reveal fade-in.
+   ------------------------------------------------------------ */
+(function () {
+  "use strict";
+
+  var fsteps = Array.prototype.slice.call(document.querySelectorAll(".fstep"));
+  var fscreens = Array.prototype.slice.call(document.querySelectorAll(".fscreen"));
+  var railDots = Array.prototype.slice.call(document.querySelectorAll(".fs-rail span"));
+  var caption = document.getElementById("fsCaption");
+  if (!fsteps.length || !fscreens.length) return;
+
+  var captions = [
+    "A comment lands — this is the moment most brands never see.",
+    "Answered in public, then moved to DM while it's still warm.",
+    "The AI keeps answering for as long as the customer has questions.",
+    "Now a high-intent lead, with the whole conversation attached.",
+    "A real voice call, without anyone on the team dialing out.",
+    "Nurtured until it closes — or until they say no thanks."
+  ];
+
+  function activate(index) {
+    fsteps.forEach(function (el, i) { el.classList.toggle("active", i === index); });
+    fscreens.forEach(function (el, i) { el.classList.toggle("on", i === index); });
+    railDots.forEach(function (dot, i) {
+      dot.classList.toggle("active", i === index);
+      dot.classList.toggle("done", i < index);
+    });
+    if (caption) caption.textContent = captions[index] || "";
+  }
+
+  activate(0);
+
+  if ("IntersectionObserver" in window) {
+    var current = 0;
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var index = parseInt(entry.target.getAttribute("data-fstep"), 10);
+          if (!isNaN(index) && index !== current) {
+            current = index;
+            activate(index);
+          }
+        });
+      },
+      { threshold: 0, rootMargin: "-45% 0px -45% 0px" }
+    );
+    fsteps.forEach(function (el) { io.observe(el); });
+  }
+})();

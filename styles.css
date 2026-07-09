@@ -449,3 +449,75 @@ section { padding: 90px 0; }
   .screen.on .appear-1, .screen.on .appear-2, .screen.on .appear-3, .screen.on .appear-4 { animation: none !important; }
   .screen .appear-1, .screen .appear-2, .screen .appear-3, .screen .appear-4 { opacity: 1; }
 }
+
+/* ============================================================
+   Scroll-paced alternative to the hero story (id="how-scroll").
+   Same visual language as .story/.phone, but the phone is pinned
+   with position:sticky and its content is driven by which .fstep
+   is centered in the viewport — no timer, so reading pace = scroll
+   pace. New class names throughout (.fs-, .fstep, .fscreen) so
+   this never touches the original #how section or its script.
+   ============================================================ */
+.fs { background: radial-gradient(900px 500px at 30% -10%, rgba(91, 80, 227, 0.22), transparent 60%), var(--dark); color: #fff; padding-top: 90px; }
+.fs-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: start; margin-top: 20px; }
+
+.fs-steps { display: grid; }
+.fstep {
+  min-height: 66vh; display: flex; flex-direction: column; justify-content: center;
+  padding: 36px 30px; border-radius: 18px; border-left: 3px solid transparent;
+  transition: background .35s ease, border-color .35s ease;
+}
+.fstep.active { background: var(--dark-2); border-left-color: var(--primary); }
+.fstep .fnum {
+  width: 40px; height: 40px; flex: none; display: grid; place-items: center;
+  border-radius: 12px; font-family: var(--font-head); font-weight: 800; font-size: 16px;
+  background: rgba(255, 255, 255, 0.08); color: var(--dark-text);
+  margin-bottom: 20px; transition: background .35s ease, color .35s ease, box-shadow .35s ease;
+}
+.fstep.active .fnum { background: linear-gradient(135deg, var(--primary), var(--violet)); color: #fff; box-shadow: 0 0 0 7px rgba(91, 80, 227, 0.16); }
+.fstep h3 { font-family: var(--font-head); font-weight: 700; font-size: clamp(20px, 2.4vw, 25px); color: #fff; margin-bottom: 12px; max-width: 24ch; line-height: 1.3; }
+.fstep p { color: var(--dark-text); font-size: 15.5px; line-height: 1.65; max-width: 48ch; opacity: .75; transition: opacity .35s ease; }
+.fstep.active p { opacity: 1; }
+
+.fs-sticky { position: sticky; top: 96px; display: grid; justify-items: center; gap: 20px; align-self: start; }
+.fs-rail { display: flex; gap: 7px; }
+.fs-rail span { width: 30px; height: 4px; border-radius: 99px; background: rgba(255, 255, 255, 0.12); transition: background .35s ease; }
+.fs-rail span.done { background: rgba(91, 80, 227, 0.55); }
+.fs-rail span.active { background: linear-gradient(90deg, var(--primary), var(--violet)); }
+
+.fphone {
+  position: relative; width: min(300px, 100%); aspect-ratio: 9 / 18.6;
+  background: #0d0b20; border-radius: 42px; border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 40px 90px -30px rgba(0, 0, 0, 0.7), inset 0 0 0 7px #05040f;
+  overflow: hidden;
+}
+.fphone-notch { position: absolute; top: 13px; left: 50%; transform: translateX(-50%); width: 88px; height: 20px; background: #05040f; border-radius: 999px; z-index: 5; }
+
+.fscreen {
+  position: absolute; inset: 7px; border-radius: 36px; padding: 44px 16px 18px;
+  opacity: 0; transform: scale(0.98); pointer-events: none;
+  transition: opacity .5s ease, transform .5s ease;
+  display: flex; flex-direction: column; gap: 10px;
+  background: #131029;
+}
+.fscreen.on { opacity: 1; transform: none; }
+.fscreen.on .appear-1 { animation: pop 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s both; }
+.fscreen.on .appear-2 { animation: pop 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s both; }
+.fscreen.on .appear-3 { animation: pop 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) 0.5s both; }
+.fscreen.on .appear-4 { animation: pop 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) 0.7s both; }
+
+.fs-caption { font-size: 13.5px; color: var(--dark-text); text-align: center; max-width: 280px; min-height: 40px; }
+
+@media (max-width: 960px) {
+  .fs-grid { grid-template-columns: 1fr; gap: 32px; }
+  .fs-sticky { position: static; order: -1; }
+  .fstep { min-height: 0; padding: 22px 20px; }
+  .fs-rail { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fstep { transition: none; }
+  .fnum { transition: none; }
+  .fscreen { transition: none; }
+  .fscreen.on .appear-1, .fscreen.on .appear-2, .fscreen.on .appear-3, .fscreen.on .appear-4 { animation: none !important; opacity: 1; }
+}
