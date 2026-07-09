@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Base360 — Stop losing customers in the comments.</title>
+  <meta name="description" content="Base360 answers every comment, DM, WhatsApp, SMS, call and email automatically, and turns the good ones into tracked leads. Try it below — no signup required." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%235b50e3'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='white' stroke-width='2.5' stroke-dasharray='33 11' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='white'/%3E%3C/svg%3E" />
+  <style>
+    /* ==========================================================
+       alt-cro.html — "The Closer": CRO-sharpened duplicate of the
+       restructured index.html. Reuses styles.css/app.js as-is
+       (nothing there is touched) and adds three page-specific
+       components the audit flagged as missing on index.html:
+       an FAQ (objection-handling), a lower-commitment secondary
+       CTA (email capture), and a dismissible sticky CTA bar.
+       Copy throughout is tightened toward outcomes over labels.
+       ========================================================== */
+    .hero-fine { text-align: center; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12.5px; color: var(--muted); margin-top: -6px; margin-bottom: 8px; }
+
+    /* ---------- FAQ ---------- */
+    .faq { background: #fff; border-block: 1px solid var(--line); }
+    .faq-list { max-width: 760px; margin: 40px auto 0; border-top: 1px solid var(--line); }
+    .faq-item { border-bottom: 1px solid var(--line); }
+    .faq-q {
+      width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 20px;
+      padding: 22px 4px; background: none; border: none; cursor: pointer; text-align: left;
+      font-family: var(--font-head); font-weight: 700; font-size: 16.5px; color: var(--ink);
+    }
+    .faq-q .plus { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 20px; color: var(--muted); transition: transform .2s; flex: none; }
+    .faq-q[aria-expanded="true"] .plus { transform: rotate(45deg); color: var(--primary); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height .28s ease; }
+    .faq-a p { padding: 0 4px 22px; color: var(--ink-soft); font-size: 15px; max-width: 62ch; }
+
+    /* ---------- Secondary CTA: email capture ---------- */
+    .capture { background: var(--bg); border-block: 1px solid var(--line); }
+    .capture-card {
+      max-width: 900px; margin-inline: auto; background: var(--card); border: 1px solid var(--line);
+      border-radius: 20px; box-shadow: var(--shadow); padding: 34px 38px;
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: 30px; align-items: center;
+    }
+    .capture-card h3 { font-size: 19px; margin-bottom: 8px; }
+    .capture-card > div > p { color: var(--ink-soft); font-size: 14.5px; }
+    .capture-form { display: flex; flex-direction: column; gap: 10px; }
+    .capture-row { display: flex; gap: 8px; }
+    .capture-row input {
+      flex: 1; min-width: 0; border: 1.5px solid var(--line); border-radius: 10px; padding: 12px 14px;
+      font: inherit; font-size: 14.5px; background: var(--bg); color: var(--ink);
+    }
+    .capture-row input:invalid:not(:placeholder-shown) { border-color: #dc2626; }
+    .capture-error { font-size: 12.5px; color: #dc2626; display: none; }
+    .capture-error.show { display: block; }
+    .capture-success {
+      display: none; background: #e7f7ec; border: 1px solid #bfe8cc; border-radius: 10px;
+      padding: 12px 14px; font-size: 13.5px; color: var(--green); font-weight: 600;
+    }
+    .capture-success.show { display: block; }
+    .capture-fine { font-size: 11.5px; color: var(--muted); }
+
+    /* ---------- Sticky bottom CTA bar ---------- */
+    .sticky-cta { position: fixed; left: 0; right: 0; bottom: -100px; z-index: 60; transition: bottom .3s ease; }
+    .sticky-cta.show { bottom: 0; }
+    .sticky-inner {
+      background: var(--dark); color: #fff; border-radius: 16px 16px 0 0; margin-inline: auto;
+      width: min(720px, 100% - 24px); padding: 14px 18px; display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 -14px 40px -18px rgba(0,0,0,0.4);
+    }
+    .sticky-inner p { font-size: 13.5px; font-weight: 600; flex: 1; }
+    .sticky-close { background: none; border: none; color: rgba(255,255,255,.65); font-size: 18px; cursor: pointer; padding: 4px 8px; flex: none; }
+
+    @media (max-width: 760px) {
+      .capture-card { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .capture-row { flex-direction: column; align-items: stretch; }
+      .capture-row .btn { width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sticky-cta { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav" id="top">
+    <div class="container nav-inner">
+      <a class="logo" href="#top" aria-label="Base360 home">
+        <span class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="28" height="28"><rect width="32" height="32" rx="8" fill="var(--primary)"/><circle cx="16" cy="16" r="7" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="33 11" stroke-linecap="round"/><circle cx="16" cy="16" r="2.5" fill="#fff"/></svg>
+        </span>
+        <span class="logo-word">base<b>360</b></span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#how">How it works</a>
+        <a href="#features">Product</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div class="nav-cta">
+        <a class="btn btn-ghost" href="#cta">Sign in</a>
+        <a class="btn btn-primary" href="#cta">Get started free</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============ HERO: "See it unify" ============ -->
+    <section class="unify unify-hero" id="unify">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker"><span class="pulse-dot" aria-hidden="true"></span> One system for every conversation</p>
+          <h1>Every channel lands here.<br />Every one gets answered.</h1>
+          <p class="sub">Stop losing customers in the comments. Base360 answers every comment, DM, WhatsApp, SMS, call and email automatically — then turns the good ones into tracked leads. Click a channel below and watch it happen.</p>
+        </div>
+        <div class="hero-actions center reveal">
+          <a class="btn btn-primary btn-lg" href="#cta">Get started free</a>
+          <a class="btn btn-outline btn-lg" href="#features">See what's inside</a>
+        </div>
+        <p class="hero-fine reveal">No credit card · Live in 10 minutes · Cancel anytime</p>
+
+        <div class="unify-stage" id="unifyStage">
+          <div class="unify-sources" role="group" aria-label="Simulate an incoming message from a channel">
+            <button class="src-btn" type="button" data-src="ig" style="--c:#dd2a7b">Instagram</button>
+            <button class="src-btn" type="button" data-src="tt" style="--c:#111111">TikTok</button>
+            <button class="src-btn" type="button" data-src="wa" style="--c:#25d366">WhatsApp</button>
+            <button class="src-btn" type="button" data-src="sms" style="--c:#38bdf8">SMS</button>
+            <button class="src-btn" type="button" data-src="call" style="--c:#6366f1">Call</button>
+            <button class="src-btn" type="button" data-src="mail" style="--c:#f43f5e">Email</button>
+          </div>
+
+          <div class="unify-inbox" id="unifyInbox">
+            <div class="unify-inbox-head"><span>UNIFIED INBOX — ALL CHANNELS</span><span class="unify-live-dot" aria-hidden="true"></span></div>
+            <div class="unify-rows" id="unifyRows">
+              <p class="unify-empty" id="unifyEmpty">Click a channel above — the message will land here and get answered automatically.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="unify-stats reveal">
+          <div><b id="unifyCount">0</b><span>Answered here</span><i class="unify-vs">vs. 0 replied manually in this time</i></div>
+          <div><b id="unifyAvg">—</b><span>Avg reply time</span><i class="unify-vs">vs. ~4 hrs typical first reply</i></div>
+          <div><b>6</b><span>Channels, 1 inbox</span><i class="unify-vs">vs. 6 separate logins to check</i></div>
+        </div>
+        <p class="unify-hint reveal">This keeps running on its own too — try clicking a couple of channels back to back.</p>
+      </div>
+    </section>
+
+    <!-- ============ PROBLEM ============ -->
+    <section class="problem" id="problem">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">The problem</p>
+          <h2>Every unanswered comment is a lost sale.</h2>
+          <p class="sub">B2C brands are buried in messages from every direction — Instagram and TikTok comments and DMs, WhatsApp, SMS, calls, email — plus newsletters and marketing in yet another set of tools.</p>
+        </div>
+        <div class="pain-grid">
+          <div class="pain-card reveal" style="--d:.05s">
+            <span class="pain-emoji">🫥</span>
+            <h3>Comments go unanswered</h3>
+            <p>Every ignored comment is a customer who bought somewhere else — and everyone watching saw the silence.</p>
+          </div>
+          <div class="pain-card reveal" style="--d:.15s">
+            <span class="pain-emoji">🕳️</span>
+            <h3>Leads slip through</h3>
+            <p>A question in a DM is a lead. Without one system, it never reaches sales — it just scrolls away.</p>
+          </div>
+          <div class="pain-card reveal" style="--d:.25s">
+            <span class="pain-emoji">🧩</span>
+            <h3>No single view of the customer</h3>
+            <p>Five inboxes, three tools, zero context. Nobody knows who said what, where, or what happened next.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HOW IT WORKS — scroll-paced story ============ -->
+    <section class="fs" id="how">
+      <div class="container">
+        <div class="section-head section-head-dark reveal">
+          <p class="kicker kicker-dark">How it works</p>
+          <h2>One comment becomes a customer. <em>Automatically.</em></h2>
+          <p class="sub">Scroll through a single TikTok comment getting handled end to end by AI — across every channel, at your own pace, with no one lifting a finger.</p>
+        </div>
+
+        <div class="fs-grid">
+          <div class="fs-steps" id="fsSteps">
+            <div class="fstep" data-fstep="0">
+              <span class="fnum">1</span>
+              <h3>A customer comments on a TikTok post</h3>
+              <p>"how much is this?" — sitting there in the replies, in plain sight, the exact moment most brands miss without ever knowing it happened.</p>
+            </div>
+            <div class="fstep" data-fstep="1">
+              <span class="fnum">2</span>
+              <h3>The AI agent replies publicly, then slides into their DMs</h3>
+              <p>A public reply lands within seconds, so anyone else reading the comments sees the brand is on it — then the conversation moves to DM while the intent is still hot.</p>
+            </div>
+            <div class="fstep" data-fstep="2">
+              <span class="fnum">3</span>
+              <h3>In the DM, the AI explains the offering</h3>
+              <p>Every follow-up question gets answered in your brand's voice, for as long as it takes — no script running out halfway through the conversation.</p>
+            </div>
+            <div class="fstep" data-fstep="3">
+              <span class="fnum">4</span>
+              <h3>The contact is added to the CRM as a high-intent lead</h3>
+              <p>Full context — what they asked, what they were told, how interested they sounded — attached automatically. Sales sees it the moment it's worth their time.</p>
+            </div>
+            <div class="fstep" data-fstep="4">
+              <span class="fnum">5</span>
+              <h3>The AI places a call with an AI voice</h3>
+              <p>A real spoken conversation walks the customer through the product and books the next step, without anyone on the team picking up a phone.</p>
+            </div>
+            <div class="fstep" data-fstep="5">
+              <span class="fnum">6</span>
+              <h3>They're enrolled into marketing emails</h3>
+              <p>A nurture flow keeps going in the background, tied to the same customer record, until the sale closes — or they tell you they're not interested.</p>
+            </div>
+          </div>
+
+          <div class="fs-sticky">
+            <div class="fs-rail" aria-hidden="true">
+              <span data-rail="0"></span><span data-rail="1"></span><span data-rail="2"></span><span data-rail="3"></span><span data-rail="4"></span><span data-rail="5"></span>
+            </div>
+            <div class="fphone" aria-hidden="true">
+              <div class="fphone-notch"></div>
+
+              <div class="fscreen fscreen-tiktok" data-fscreen="0">
+                <div class="tiktok-video">
+                  <span class="tv-gradient"></span>
+                  <span class="tv-caption">✨ Our best-seller is back in stock</span>
+                </div>
+                <div class="tiktok-comments">
+                  <div class="tk-comment appear-1">
+                    <span class="avatar av-1">M</span>
+                    <span><b>@mia.styles</b><i>how much is this? 😍</i></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="fscreen fscreen-tiktok" data-fscreen="1">
+                <div class="tiktok-video small">
+                  <span class="tv-gradient"></span>
+                  <span class="tv-caption">✨ Our best-seller is back in stock</span>
+                </div>
+                <div class="tiktok-comments">
+                  <div class="tk-comment">
+                    <span class="avatar av-1">M</span>
+                    <span><b>@mia.styles</b><i>how much is this? 😍</i></span>
+                  </div>
+                  <div class="tk-comment brand appear-1">
+                    <span class="avatar av-brand">b</span>
+                    <span><b>yourbrand <em class="ai-chip">AI</em></b><i>It's $49 with free shipping! Just sent you the details 💜</i></span>
+                  </div>
+                  <div class="dm-toast appear-2">→ Sliding into DMs…</div>
+                </div>
+              </div>
+
+              <div class="fscreen fscreen-dm" data-fscreen="2">
+                <div class="dm-head"><span class="avatar av-brand">b</span> yourbrand <em class="ai-chip">AI agent</em></div>
+                <div class="dm-body">
+                  <p class="bubble them appear-1">Hey Mia! 👋 The set you asked about is $49 — free shipping this week.</p>
+                  <p class="bubble me appear-2">is it good for sensitive skin?</p>
+                  <p class="bubble them appear-3">Totally — it's fragrance-free and dermatologist tested. Want me to hold one for you?</p>
+                  <p class="bubble me appear-4">yes please!! 🙌</p>
+                </div>
+              </div>
+
+              <div class="fscreen fscreen-crm" data-fscreen="3">
+                <div class="crm-head">CRM · New lead</div>
+                <div class="crm-card appear-1">
+                  <div class="crm-top"><span class="avatar av-1 big">M</span><span><b>Mia Santoso</b><i>@mia.styles · TikTok</i></span></div>
+                  <div class="crm-rows">
+                    <span>Intent<b class="intent-hot">🔥 High</b></span>
+                    <span>Source<b>TikTok comment</b></span>
+                    <span>Stage<b>Qualified by AI</b></span>
+                    <span>Owner<b>Sales · Andra</b></span>
+                  </div>
+                  <div class="crm-timeline appear-2">
+                    <span>💬 Commented on post</span>
+                    <span>⚡ AI replied publicly</span>
+                    <span>📩 DM conversation · 4 msgs</span>
+                    <span class="now">🎯 Handed to sales</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="fscreen fscreen-call" data-fscreen="4">
+                <div class="call-avatar appear-1"><span class="avatar av-brand huge">b</span></div>
+                <p class="call-name">yourbrand <em class="ai-chip">AI voice</em></p>
+                <p class="call-status">Calling Mia · walking through the product…</p>
+                <div class="waveform appear-2">
+                  <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <p class="call-note appear-3">“…and since you mentioned sensitive skin, I'd start with the gentle set.”</p>
+              </div>
+
+              <div class="fscreen fscreen-email" data-fscreen="5">
+                <div class="crm-head">Marketing · Enrolled</div>
+                <div class="email-card appear-1">
+                  <span class="email-tag">Welcome flow · Email 1 of 5</span>
+                  <b>Mia, your gentle set is waiting 💜</b>
+                  <i>Here's everything you asked about — plus 10% off your first order.</i>
+                  <span class="email-btn">Complete your order</span>
+                </div>
+                <div class="email-stats appear-2">
+                  <span><b>Opened</b> 2m ago</span>
+                  <span><b>Clicked</b> ✓</span>
+                  <span class="now"><b>Status</b> 🛒 Purchased</span>
+                </div>
+              </div>
+            </div>
+            <p class="fs-caption" id="fsCaption">Scroll — the phone will catch up to wherever you are.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURES ============ -->
+    <section class="features" id="features">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">The product</p>
+          <h2>Four things. One system.</h2>
+          <p class="sub">Everything between "someone commented" and "they became a customer" — reach customers, run the team, and close.</p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card reveal" style="--d:.05s">
+            <span class="feature-num">1</span>
+            <h3>Never miss another comment — one inbox, every channel</h3>
+            <p>Every social comment (Meta, TikTok), DM, WhatsApp, SMS, call and email in one place. Reply without logging into a single social platform.</p>
+            <div class="mini mini-inbox" aria-hidden="true">
+              <span><i class="ch-icon ch-tt"></i>TikTok comment <em>· 2s</em></span>
+              <span><i class="ch-icon ch-ig"></i>Instagram DM <em>· 8s</em></span>
+              <span><i class="ch-icon ch-wa"></i>WhatsApp <em>· 12s</em></span>
+              <span><i class="ch-icon ch-mail"></i>Email <em>· 1m</em></span>
+            </div>
+          </article>
+
+          <article class="feature-card reveal" style="--d:.15s">
+            <span class="feature-num">2</span>
+            <h3>Your team stops doing the repetitive replies</h3>
+            <p>Build AI agents that handle any task — replying to comments, answering customers, qualifying leads, following up, even calling with an AI voice.</p>
+            <div class="mini mini-agents" aria-hidden="true">
+              <span class="agent-pill on">💬 Comment replier <em>· active</em></span>
+              <span class="agent-pill on">🎯 Lead qualifier <em>· active</em></span>
+              <span class="agent-pill on">📞 AI voice caller <em>· active</em></span>
+              <span class="agent-pill">➕ New agent</span>
+            </div>
+          </article>
+
+          <article class="feature-card reveal" style="--d:.25s">
+            <span class="feature-num">3</span>
+            <h3>Every conversation becomes a pipeline, not a memory</h3>
+            <p>High-intent leads are surfaced and handed straight to sales automatically, so nothing gets missed and every opportunity gets worked.</p>
+            <div class="mini mini-crm" aria-hidden="true">
+              <div class="kanban-col"><b>New</b><span class="kb kb-1"></span><span class="kb kb-2"></span></div>
+              <div class="kanban-col hot"><b>🔥 High-intent</b><span class="kb kb-3"></span><span class="kb kb-1"></span><span class="kb kb-2"></span></div>
+              <div class="kanban-col"><b>Won</b><span class="kb kb-3"></span></div>
+            </div>
+          </article>
+
+          <article class="feature-card reveal" style="--d:.35s">
+            <span class="feature-num">4</span>
+            <h3>Subscribers grow while nobody's watching</h3>
+            <p>Capture subscribers from your website, send newsletters and campaigns, and track it all — sign-ups, opens, clicks — tied to the same customer record.</p>
+            <div class="mini mini-marketing" aria-hidden="true">
+              <div class="spark">
+                <svg viewBox="0 0 120 40" preserveAspectRatio="none"><path d="M0 34 L15 30 L30 31 L45 24 L60 26 L75 16 L90 18 L105 8 L120 4" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round"/></svg>
+                <em>Subscribers · +38% this month</em>
+              </div>
+              <span class="mk-stat"><b>62%</b> opens</span>
+              <span class="mk-stat"><b>18%</b> clicks</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ "Human vs AI" race comparison ============ -->
+    <section class="race" id="race">
+      <div class="container">
+        <div class="section-head section-head-dark reveal">
+          <p class="kicker kicker-dark">What actually happens at your volume</p>
+          <h2>Same 10 messages. <em>Two very different afternoons.</em></h2>
+          <p class="sub">This runs on its own once you scroll here — the same burst of comments hitting a human-only team versus Base360, side by side.</p>
+        </div>
+        <div style="text-align: center;">
+          <a class="btn btn-outline-light" href="#race" id="raceReplay">↻ Replay the comparison</a>
+        </div>
+
+        <div class="race-grid reveal">
+          <div class="race-col">
+            <div class="race-head"><h3>A human team</h3><span class="race-tag bad">Answering manually</span></div>
+            <div class="race-queue" id="raceHuman" aria-live="polite"></div>
+            <div class="race-foot"><span>Under 1 min: <b id="humanFast">0</b>/10</span><span>Still waiting: <b id="humanStuck">0</b></span></div>
+          </div>
+          <div class="race-col">
+            <div class="race-head"><h3>Base360</h3><span class="race-tag good">AI agents, every channel</span></div>
+            <div class="race-queue" id="raceAI" aria-live="polite"></div>
+            <div class="race-foot"><span>Under 1 min: <b id="aiFast">0</b>/10</span><span>Still waiting: <b id="aiStuck">0</b></span></div>
+          </div>
+        </div>
+
+        <div class="race-score reveal" id="raceScore">
+          <div><b id="scoreHumanAvg">—</b><span>avg human reply time*</span></div>
+          <div class="hl"><b id="scoreAiAvg">—</b><span>avg Base360 reply time</span></div>
+          <div><b id="scoreHumanStuck">0</b><span>comments never answered (human)</span></div>
+          <div class="hl"><b id="scoreAiStuck">0</b><span>comments never answered (Base360)</span></div>
+        </div>
+        <p class="race-fine reveal">*Among the ones that did get a reply — the other four never did.</p>
+      </div>
+    </section>
+
+    <!-- ============ NEW: FAQ — objection handling ============ -->
+    <section class="faq" id="faq">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Before you ask</p>
+          <h2>Questions people actually have.</h2>
+          <p class="sub">If you've read this far and still have a doubt, it's probably one of these.</p>
+        </div>
+        <div class="faq-list reveal">
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">Does this replace my team, or work alongside them?<span class="plus">+</span></button>
+            <div class="faq-a"><p>Alongside. The AI handles the repetitive first response and routine questions; anything high-intent or complicated gets handed to your team with full context — not dumped on them cold.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">What if the AI gets something wrong?<span class="plus">+</span></button>
+            <div class="faq-a"><p>You set what it's allowed to say — pricing, policies, tone — and can review every conversation. If it's ever unsure, it can hand off to a human instead of guessing.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">Which platforms does it actually connect to?<span class="plus">+</span></button>
+            <div class="faq-a"><p>Instagram and TikTok comments and DMs, WhatsApp, SMS, phone calls, and email — all in one inbox, from day one.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">Is there really a free plan?<span class="plus">+</span></button>
+            <div class="faq-a"><p>Yes — your first 100 conversations are free, no credit card required, so you can see it work on your own comments before paying anything.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">How long does setup take?<span class="plus">+</span></button>
+            <div class="faq-a"><p>Most teams connect their first channel and have an AI agent replying within about 10 minutes.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ NEW: secondary CTA — email capture ============ -->
+    <section class="capture">
+      <div class="container">
+        <div class="capture-card reveal">
+          <div>
+            <h3>Not ready to sign up? We'll send the tour instead.</h3>
+            <p>A 2-minute walkthrough of exactly what you just tried above — plus how to connect your first channel.</p>
+          </div>
+          <div>
+            <form class="capture-form" id="captureForm" novalidate>
+              <div class="capture-row">
+                <label class="sr-only" for="captureEmail" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Work email</label>
+                <input id="captureEmail" type="email" placeholder="you@yourbrand.com" required />
+                <button class="btn btn-primary" type="submit">Email me the tour</button>
+              </div>
+              <p class="capture-error" id="captureError" aria-live="polite">Enter a valid email address so we know where to send it.</p>
+              <p class="capture-fine">One email. No spam, unsubscribe anytime.</p>
+            </form>
+            <p class="capture-success" id="captureSuccess" aria-live="polite"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="cta" id="cta">
+      <div class="container">
+        <div class="cta-card reveal">
+          <div class="cta-glow" aria-hidden="true"></div>
+          <h2>Stop missing conversations.<br />Start closing them.</h2>
+          <p>Connect your channels in minutes. Let the AI take the first shift today.</p>
+          <div class="hero-actions center">
+            <a class="btn btn-light btn-lg" href="#">Get started free</a>
+            <a class="btn btn-outline-light btn-lg" href="#how">Watch the flow again</a>
+          </div>
+          <p class="cta-fine">No credit card required · Connect Meta, TikTok, WhatsApp &amp; more</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <a class="logo" href="#top">
+        <span class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="24" height="24"><rect width="32" height="32" rx="8" fill="var(--primary)"/><circle cx="16" cy="16" r="7" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="33 11" stroke-linecap="round"/><circle cx="16" cy="16" r="2.5" fill="#fff"/></svg>
+        </span>
+        <span class="logo-word">base<b>360</b>.ai</span>
+      </a>
+      <p>One system for every conversation.</p>
+      <p class="footer-fine">© 2026 Base360</p>
+    </div>
+  </footer>
+
+  <!-- ============ Sticky bottom CTA ============ -->
+  <div class="sticky-cta" id="stickyCta">
+    <div class="sticky-inner">
+      <p>Ready when you are — first 100 conversations are free.</p>
+      <a class="btn btn-primary" href="#cta">Get started free</a>
+      <button class="sticky-close" id="stickyClose" aria-label="Dismiss this bar">✕</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    /* ------------------------------------------------------------
+       Page-specific interactions for the three new CRO components.
+       Independent IIFE, new ids only — never touches app.js.
+       ------------------------------------------------------------ */
+    (function () {
+      "use strict";
+
+      /* FAQ accordion */
+      document.querySelectorAll(".faq-q").forEach(function (btn) {
+        var panel = btn.nextElementSibling;
+        btn.addEventListener("click", function () {
+          var open = btn.getAttribute("aria-expanded") === "true";
+          btn.setAttribute("aria-expanded", String(!open));
+          panel.style.maxHeight = open ? "0px" : panel.scrollHeight + "px";
+        });
+      });
+
+      /* Email capture */
+      var captureForm = document.getElementById("captureForm");
+      var captureError = document.getElementById("captureError");
+      var captureSuccess = document.getElementById("captureSuccess");
+      var captureEmail = document.getElementById("captureEmail");
+      if (captureForm) {
+        captureForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          if (!captureEmail.checkValidity()) {
+            captureError.classList.add("show");
+            captureEmail.focus();
+            return;
+          }
+          captureError.classList.remove("show");
+          captureSuccess.textContent = "Sent — check " + captureEmail.value + " in the next minute or two.";
+          captureSuccess.classList.add("show");
+          captureForm.hidden = true;
+        });
+      }
+
+      /* Sticky CTA bar — appears once the hero scrolls out of view */
+      var stickyCta = document.getElementById("stickyCta");
+      var stickyClose = document.getElementById("stickyClose");
+      var dismissed = false;
+      try { dismissed = sessionStorage.getItem("base360-cro-sticky-dismissed") === "1"; } catch (err) {}
+      var heroEl = document.getElementById("unify");
+      if ("IntersectionObserver" in window && heroEl && stickyCta) {
+        var heroIo = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (dismissed) return;
+            stickyCta.classList.toggle("show", !entry.isIntersecting);
+          });
+        }, { threshold: 0 });
+        heroIo.observe(heroEl);
+      }
+      if (stickyClose) {
+        stickyClose.addEventListener("click", function () {
+          dismissed = true;
+          stickyCta.classList.remove("show");
+          try { sessionStorage.setItem("base360-cro-sticky-dismissed", "1"); } catch (err) {}
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
