@@ -83,6 +83,36 @@ table.spec th { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.0
 table.spec tr:last-child td { border-bottom: none; }
 table.spec td.mono { color: var(--primary-deep); }
 
+.src-note { font-size: 12.5px; color: var(--muted); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; margin-top: 10px; }
+.src-note b { color: var(--ink); }
+
+.competitor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+.competitor-card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; box-shadow: var(--shadow); }
+.competitor-card .ctop { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.competitor-card h3 { font-size: 16px; }
+.competitor-card .cat { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; background: var(--primary-soft); color: var(--primary-deep); padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
+.competitor-card p { font-size: 13.5px; margin-bottom: 10px; }
+.competitor-card .vs { font-size: 13px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 4px; }
+.competitor-card .vs b { color: var(--ink); font-weight: 600; }
+
+.finding { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--muted); border-radius: 14px; padding: 18px 22px; margin: 16px 0; }
+.finding.sev-high { border-left-color: var(--bad); }
+.finding.sev-med { border-left-color: #d97706; }
+.finding.sev-low { border-left-color: var(--good); }
+.finding h4 { font-size: 15px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+.finding .sev { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; }
+.finding.sev-high .sev { background: var(--bad-soft); color: var(--bad); }
+.finding.sev-med .sev { background: #fef3c7; color: #b45309; }
+.finding.sev-low .sev { background: var(--good-soft); color: var(--good); }
+@media (prefers-color-scheme: dark) { .finding.sev-med .sev { background: #3a2c10; color: #f6c976; } }
+.finding p { font-size: 14px; margin-bottom: 8px; }
+.finding .fix { font-size: 13px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 4px; }
+.finding .fix b { color: var(--ink); font-weight: 600; }
+.audit-score { display: flex; gap: 14px; flex-wrap: wrap; margin: 20px 0; }
+.audit-score > div { flex: 1; min-width: 150px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; text-align: center; }
+.audit-score b { display: block; font-family: var(--mono); font-size: 24px; color: var(--primary-deep); }
+.audit-score span { font-size: 12px; color: var(--muted); }
+
 .links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
 .link-card { display: block; text-decoration: none; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
 .link-card:hover { border-color: var(--primary); }
@@ -95,6 +125,7 @@ footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center;
   .change-row { grid-template-columns: 1fr; }
   .change-cell.before { border-right: none; border-bottom: 1px solid var(--line); }
   .links-grid { grid-template-columns: 1fr; }
+  .competitor-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -109,6 +140,7 @@ footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center;
       <span><b>7</b> page variants</span>
       <span><b>2</b> new proof sections</span>
       <span><b>3</b> rounds of review-driven revision</span>
+      <span><b>6</b> competitors researched</span>
     </div>
   </div>
 </header>
@@ -118,6 +150,8 @@ footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center;
     <a href="#approach">Approach</a>
     <a href="#principles">Principles applied</a>
     <a href="#changelog">Review → change log</a>
+    <a href="#competitive">Competitive landscape</a>
+    <a href="#audit">index.html audit</a>
     <a href="#pages">All pages</a>
   </div>
 </nav>
@@ -227,8 +261,125 @@ footer { border-top: 1px solid var(--line); padding: 28px 0; text-align: center;
     </div>
   </section>
 
+  <section id="competitive">
+    <h2><span class="h2-num">04</span>Competitive landscape</h2>
+    <p class="section-sub">Base360 doesn't have one obvious rival — it sits at the intersection of four categories that today are each sold as separate tools. Six real products were reviewed directly (five fetched live from their current homepages; ManyChat blocks automated fetching, so its entry below reflects well-established public positioning rather than a fresh page pull).</p>
+
+    <div class="competitor-grid">
+      <div class="competitor-card">
+        <div class="ctop"><h3>Gorgias</h3><span class="cat">E-comm helpdesk</span></div>
+        <p>"#1 Helpdesk + AI Agent built to drive sales." Unifies email, chat, SMS, WhatsApp, Instagram and Facebook, native to Shopify, AI pre-trained on 1B+ conversations, automates ~60% of tickets. Sells via "Book a demo" + a separate pricing page; runs a direct comparison table against Zendesk/Intercom/Ada on its own homepage.</p>
+        <p class="vs"><b>Closest overlap:</b> the unified-inbox + AI-agent pitch. <b>Gap Base360 fills:</b> Gorgias is support-first (tickets, refunds); it has no comment-to-lead or CRM-pipeline framing — Base360's "every comment becomes a tracked lead" angle is closer to sales than support.</p>
+      </div>
+      <div class="competitor-card">
+        <div class="ctop"><h3>Kustomer</h3><span class="cat">AI-native CRM/CX</span></div>
+        <p>Unified customer-data model shared by AI and human agents, real-time intent routing, "proactive rep signals." Serves 600+ B2C/B2B brands (Vuori, Turo, Sweetgreen). Homepage leads with a demo-booking CTA and a G2 5.0-rating trust badge.</p>
+        <p class="vs"><b>Closest overlap:</b> "one customer record" framing, almost identical to Base360's CRM pitch. <b>Gap Base360 fills:</b> Kustomer is CRM-first and channel-agnostic; it doesn't foreground social comments/DMs as the entry point the way Base360's hero does.</p>
+      </div>
+      <div class="competitor-card">
+        <div class="ctop"><h3>Chatfuel</h3><span class="cat">Social AI "coworker"</span></div>
+        <p>"Not a chatbot, a coworker" — four specialized AI agents (Sales, Marketing, Booking, Strategy) handling DMs, comments and story replies across Instagram, WhatsApp, Facebook and TikTok. Self-serve, no-credit-card signup, claims 150,000+ businesses.</p>
+        <p class="vs"><b>Closest overlap:</b> the single most direct competitor to Base360's hero premise (comment → DM → automated handling). <b>Gap Base360 fills:</b> no AI voice follow-up call and no built-in sales-CRM pipeline in Chatfuel's public feature set — Base360's step 5/6 (voice call, nurture) go further down-funnel.</p>
+      </div>
+      <div class="competitor-card">
+        <div class="ctop"><h3>Zowie</h3><span class="cat">Enterprise AI agent</span></div>
+        <p>"AI you can hand your customer to" — deterministic decision engine kept separate from the LLM specifically so a model update can't silently change a refund policy. Targets regulated industries (banking, insurance, telecom); SOC 2/GDPR/HIPAA badges on the homepage.</p>
+        <p class="vs"><b>Closest overlap:</b> AI-agent-does-the-work positioning. <b>Gap Base360 fills:</b> Zowie is enterprise/compliance-first and demo-gated; Base360's self-serve, try-before-you-talk-to-sales motion targets a smaller, faster-moving buyer Zowie doesn't chase.</p>
+      </div>
+      <div class="competitor-card">
+        <div class="ctop"><h3>Sprout Social</h3><span class="cat">Social inbox + analytics</span></div>
+        <p>Unified inbox across 150+ social channels, an AI agent ("Trellis") that summarizes conversations into insights, plus publishing, influencer and analytics tooling. Tiered pricing published openly: $199 / $299 / $399 per seat/month.</p>
+        <p class="vs"><b>Closest overlap:</b> "unified inbox, many channels." <b>Gap Base360 fills:</b> Sprout is built for marketing/social teams who report on engagement, not for converting a single comment into a sold order — Base360's CRM + nurture loop is the missing back half of Sprout's funnel.</p>
+      </div>
+      <div class="competitor-card">
+        <div class="ctop"><h3>ManyChat <span class="mono" style="font-size:11px;font-weight:600">*</span></h3><span class="cat">Category pioneer</span></div>
+        <p>Widely credited with popularizing "comment on a post → auto-DM" as a growth tactic for Instagram and TikTok creators and DTC brands. Broad, low-cost, self-serve, huge existing install base and community.</p>
+        <p class="vs"><b>Closest overlap:</b> the exact mechanic in Base360's hero story (public reply → slide into DMs). <b>Gap Base360 fills:</b> ManyChat's reputation is a growth/marketing tool, not a sales-and-support system of record — it doesn't claim a CRM, a support inbox, or voice AI.</p>
+      </div>
+    </div>
+    <p class="src-note"><b>Note on sourcing:</b> homepage content for Gorgias, Zowie, Chatfuel, Kustomer and Sprout Social was fetched directly from their live sites during this research pass. ManyChat's site returned <span class="mono">403</span> to automated fetches on every attempt (marked with *); its entry reflects durable, widely-documented public positioning rather than a page pulled today, and shouldn't be read as equally fresh evidence.</p>
+
+    <h3 style="font-size:17px;margin-top:34px;margin-bottom:10px;">What this means for Base360</h3>
+    <div class="finding sev-low">
+      <h4>The "5 tools duct-taped together" pain point is real, not invented for copy <span class="sev">Validated</span></h4>
+      <p>Every competitor above is genuinely single-category: Gorgias doesn't sell CRM, Kustomer doesn't lead with comments, Sprout doesn't close sales, Chatfuel doesn't run a support pipeline. A brand chasing everything Base360 promises today is realistically paying for three or four of these products at once. The comparison table already built into <code>alt-walkthrough.html</code> ("typical stack" vs Base360) is directionally accurate, not a strawman.</p>
+    </div>
+    <div class="finding sev-med">
+      <h4>"All-in-one" is the most contested part of the pitch, not the safest <span class="sev">Watch</span></h4>
+      <p>Gorgias has already added Voice and SMS; Kustomer's entire pitch is a unified record; incumbents are visibly expanding toward the same "one system" claim Base360 is making from day one. Base360 can't win on "we're the only one who unifies channels" for long — it needs a sharper, defensible second reason (self-serve try-before-you-talk-to-sales, or the voice-AI + CRM nurture loop going further down-funnel than any single competitor above) foregrounded in the copy, not just implied.</p>
+    </div>
+    <div class="finding sev-low">
+      <h4>The self-serve live demo is a genuine, uncommon differentiator <span class="sev">Lean in</span></h4>
+      <p>None of the five competitors fetched put a real, clickable, no-signup demo in the hero. Gorgias, Kustomer and Zowie are all demo-gated ("Book a demo" as the primary CTA). Chatfuel shows a dashboard visual but nothing confirmed interactive. <code>alt-tryit.html</code>'s hero — type a comment, get a real AI reply, see it filed to a CRM, before any signup — is a real point of difference worth stating explicitly in copy ("try it, don't book a call to see it"), not just building quietly.</p>
+    </div>
+    <div class="finding sev-med">
+      <h4>Base360's proof today is simulated; competitors' proof is customer-named <span class="sev">Watch</span></h4>
+      <p>Gorgias cites Bare Minerals (8.83× ROI) and Orthofeet (56% automation); Sprout cites Honda (251% engagement lift); Kustomer cites Turo and Sweetgreen. Base360's numbers across every variant (0 missed, 12s reply, 38 leads) are illustrative, clearly framed as a demo rather than a claim — appropriate for this stage, but the moment there's a real early customer, replacing even one simulated stat with a named, attributed result will out-convert the cleanest demo animation.</p>
+    </div>
+  </section>
+
+  <section id="audit">
+    <h2><span class="h2-num">05</span><code>index.html</code> — reading &amp; CRO deep-dive</h2>
+    <p class="section-sub">A focused audit of the current state of the first variant, split the way the client asked: how it reads, and how it converts. Findings are tagged by severity, not by how easy they'd be to fix.</p>
+
+    <div class="audit-score">
+      <div><b>9</b><span>content sections, single scroll</span></div>
+      <div><b>2</b><span>duplicate "how it works" tellings</span></div>
+      <div><b>1</b><span>CTA type on the whole page</span></div>
+      <div><b>0</b><span>objection-handling (FAQ) present</span></div>
+    </div>
+
+    <h3 style="font-size:17px;margin-bottom:6px;">Reading experience</h3>
+
+    <div class="finding sev-low">
+      <h4>The section rhythm is genuinely consistent <span class="sev">Working well</span></h4>
+      <p>Every section follows the same kicker → heading → sub-paragraph pattern, and light/dark backgrounds alternate roughly every one to two sections (hero → problem light, <code>#how</code>/<code>#how-scroll</code> dark, <code>#unify</code>/features light, <code>#race</code>/CTA dark). That alternation works like chapter breaks in a long document — it gives the eye a place to reset without any extra UI, and it's the reason the page doesn't feel like one undifferentiated wall of content despite its length.</p>
+    </div>
+
+    <div class="finding sev-high">
+      <h4>The page tells the same 6-step story twice, back to back <span class="sev">High</span></h4>
+      <p><code>#how</code> (autoplay) and <code>#how-scroll</code> (scroll-driven) sit directly next to each other and narrate the identical TikTok-comment-to-customer sequence with near-identical copy. That duplication exists on purpose right now — it's an internal A/B comparison for this review, not a shipped decision — but for an actual first-time visitor reading top to bottom, hitting the same story twice in a row reads as repetitive and is a plausible drop-off point ("didn't I just read this?"). This is the single most consequential open item on the page: before this goes live, one version needs to be chosen and the other either removed or demoted to a secondary/optional view.</p>
+    </div>
+
+    <div class="finding sev-med">
+      <h4>In-page navigation hasn't kept up with how much content the page now has <span class="sev">Medium</span></h4>
+      <p>The top nav still only links to <code>#how</code>, <code>#features</code> and <code>#problem</code> — the two newest and arguably most persuasive sections, <code>#unify</code> and <code>#race</code>, aren't reachable from the nav at all. Anyone who lands mid-page from a shared link, or wants to jump back to "that live demo thing," has no way to do it except scrolling blind.</p>
+      <p class="fix"><b>Fix:</b> add <code>#unify</code> and <code>#race</code> to <code>.nav-links</code>, or replace the three-link nav with a short progress-style rail now that the page has grown to nine sections.</p>
+    </div>
+
+    <div class="finding sev-low">
+      <h4>Channel icons are still single characters standing in for logos <span class="sev">Carried over, unresolved</span></h4>
+      <p>This was flagged in the very first review pass of this project and was never separately fixed: <code>.ch-icon</code> renders channel marks as Unicode glyphs (♪ for TikTok, ✆ for WhatsApp, ☎ for calls, @ for email) rather than real icons. Low severity on its own, but it's the kind of detail that erodes trust exactly in the sections built to establish trust (the channel row under the hero, the <code>#unify</code> source buttons).</p>
+    </div>
+
+    <h3 style="font-size:17px;margin:28px 0 6px;">CRO (conversion) experience</h3>
+
+    <div class="finding sev-high">
+      <h4>Every visitor gets exactly one action, regardless of readiness <span class="sev">High</span></h4>
+      <p>The only conversion path on the entire page is "Get started free," repeated in the nav, hero and final CTA. There is no lower-commitment alternative — no email capture, no "book a demo," no newsletter/waitlist — for a visitor who's convinced but not ready to create an account cold. <code>alt-tryit.html</code> solved exactly this with "Email me a 2-min tour instead"; <code>index.html</code> has no equivalent, so every not-quite-ready visitor simply leaves with nothing captured.</p>
+      <p class="fix"><b>Fix:</b> add one lower-commitment action — even a simple email-capture block reusing the pattern already built for <code>alt-tryit.html</code> — near the final CTA.</p>
+    </div>
+
+    <div class="finding sev-high">
+      <h4>No objection-handling anywhere on the page <span class="sev">High</span></h4>
+      <p><code>alt-tryit.html</code> and <code>alt-walkthrough.html</code> both carry an FAQ accordion answering the questions a skeptical visitor is actually holding ("does this replace my team," "what if the AI gets something wrong," "is there really a free plan"). <code>index.html</code> has none — a visitor can scroll the entire page, watch both story formats, play with the live demo and the race, and still reach the final CTA with an unanswered doubt.</p>
+      <p class="fix"><b>Fix:</b> port the FAQ block from <code>alt-tryit.html</code> as a new section before the final CTA — it's already written and already accessible (<code>aria-expanded</code> accordion).</p>
+    </div>
+
+    <div class="finding sev-med">
+      <h4>The interactive proof sections are a double-edged sword for a ready-to-buy visitor <span class="sev">Medium</span></h4>
+      <p><code>#unify</code> and <code>#race</code> are strong trust-builders for someone who needs convincing, but they're also pure engagement — every second spent clicking channel buttons or watching a ~6.5s race animation is a second not spent moving toward the CTA. For a bottom-funnel visitor who already knows they want in, a long, playful page without a persistent CTA is friction, not proof.</p>
+      <p class="fix"><b>Fix:</b> add a sticky/dismissible CTA bar (the pattern already exists in <code>alt-tryit.html</code>) so an already-convinced visitor never has to scroll back up to act, no matter how deep into the demos they are.</p>
+    </div>
+
+    <div class="finding sev-low">
+      <h4>Proof placement in the funnel is correct <span class="sev">Working well</span></h4>
+      <p>The <code>#race</code> scoreboard — the single most dramatic piece of evidence on the page — sits directly before the final CTA, right where a closing argument belongs. That ordering (build the case, then ask) is good structure and shouldn't change even as the items above get addressed.</p>
+    </div>
+  </section>
+
   <section id="pages">
-    <h2><span class="h2-num">04</span>All pages, for reference</h2>
+    <h2><span class="h2-num">06</span>All pages, for reference</h2>
     <p class="section-sub">Seven independent variants, all on branch <code>claude/frontend-design-task-tgzrkj</code>.</p>
     <table class="spec">
       <thead><tr><th>File</th><th>Thesis</th></tr></thead>
